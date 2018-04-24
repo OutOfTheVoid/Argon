@@ -449,21 +449,20 @@ Argon::String::operator std::basic_string<char16_t> () const
 
 		uint32_t code = static_cast<uint32_t> ( chars [ index ] );
 		index ++;
-
+		
 		if ( code < 0x10000 )
 			out.push_back ( static_cast<char16_t> ( code ) );
 		else
 		{
-
+			
 			out.push_back ( static_cast<char16_t> ( ( ( code >> 10 ) & 0x3FF ) | 0xD800 ) );
 			out.push_back ( static_cast<char16_t> ( ( code & 0x3FF ) | 0xDC00 ) );
-
+			
 		}
-
+		
 	}
-
+	
 	return out;
-
 };
 
 Argon::String && operator ""_as ( const char * c_string, size_t length )

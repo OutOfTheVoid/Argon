@@ -9,3 +9,5 @@ Makefile
 .obj/**
 .bin/**
 *.sln
+.vscode/**
+.vscode
