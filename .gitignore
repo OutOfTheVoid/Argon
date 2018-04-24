@@ -1,0 +1,11 @@
+obj
+bin
+*.vcxproj
+*.vcxproj.filters
+*.make
+Makefile
+.vs
+.vs/**
+.obj/**
+.bin/**
+*.sln

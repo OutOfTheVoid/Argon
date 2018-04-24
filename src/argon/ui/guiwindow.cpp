@@ -42,6 +42,46 @@ void Argon::UI::GUIWindow::set_title ( const String & title )
 
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
+
+#include <iostream>
+
+//TODO
+Argon::UI::GUIWindow * Argon::UI::GUIWindow::create(const Rect & content_frame, GUIWindowStyle style)
+{
+	
+	using OSAL::Windows::WinWindow;
+
+	WinWindow * os_window = WinWindow::create ( content_frame, 0 );
+
+	std::cout << "os_window: " << os_window << "\n";
+
+	if ( os_window != nullptr )
+		return new GUIWindow ( os_window );
+
+	return nullptr;
+
+};
+
+Argon::UI::GUIWindow::GUIWindow ( Argon::OSAL::Windows::WinWindow * os_window ):
+	RefCounted ( 1 ),
+	os_window ( os_window )
+{
+};
+
+void Argon::UI::GUIWindow::show()
+{
+
+	os_window -> show ( true );
+
+};
+
+void Argon::UI::GUIWindow::set_title(const String & title)
+{
+
+	os_window -> set_title ( title );
+
+};
+
 #else
 #endif
 

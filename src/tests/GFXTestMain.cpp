@@ -11,27 +11,33 @@ GUIWindow * main_window = nullptr;
 void AppEntry ()
 {
 	
-	Argon::UI::ApplicationInitOptions init_options;
-	init_options.foreground_app = true;
-	init_options.application_started_callback = ApplicationLaunched;
-	init_options.application_started_data = nullptr;
-	
-	Argon::UI::application_runloop ( init_options );
-	
-	main_window -> Deref ();
-	
-}
+	Argon::UI::ApplicationInitOptions app_init_options;
 
-void ApplicationLaunched ( void * Data )
+	GUIWindow * main_window;
+
+	app_init_options.application_started_callback = ApplicationLaunched;
+	app_init_options.application_started_data = reinterpret_cast <void *> ( & main_window );
+
+	Argon::UI::application_runloop ( app_init_options );
+
+	if ( main_window != nullptr )
+		main_window -> Deref ();
+	
+};
+
+void ApplicationLaunched ( void * data )
 {
 	
-	main_window = GUIWindow::create (
-		{ { 500, 500 }, { 600, 400 } },
-		GUIWindow::kstyle_closable | GUIWindow::kstyle_minimizable | GUIWindow::kstyle_resizable | GUIWindow::kstyle_framed
-	);
-	main_window -> set_title ( "Hello world!" );
-	main_window -> show ();
+	GUIWindow ** main_window_ptr = reinterpret_cast <GUIWindow **> ( data );
+
+	* main_window_ptr = GUIWindow::create ( { { 400, 400 }, { 600, 400 } }, 0 );
+
+	if ( ( * main_window_ptr ) != nullptr )
+	{
+		( * main_window_ptr ) -> show ();
+		( * main_window_ptr ) -> set_title ( "Hello world!" );
+	}
 	
-}
+};
 
 OSAL_BUILD_MAIN_METHOD( AppEntry );

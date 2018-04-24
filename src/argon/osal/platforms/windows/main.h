@@ -3,14 +3,29 @@
 
 #include <argon/argon.h>
 
-#define OSAL_BUILD_MAIN_METHOD(EntryFunction) \
-#include <Windows.h> \
-int CALLBACK WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow ) \
+#include <Windows.h>
+
+#define OSAL_BUILD_MAIN_METHOD(EntryFunction)\
+int main () \
 {\
-	Argon::LibInit ();\
+	int argc = 0;\
+	LPWSTR * argv = CommandLineToArgvW ( GetCommandLine (), & argc ); \
+	if (argv == NULL)\
+		argc = 0;\
+	Argon::Array<Argon::String> program_args ( argc );\
+	if ( argv != NULL )\
+	{\
+		for ( int i = 0; i < argc; i ++ )\
+		{\
+			Argon::String argument ( reinterpret_cast<char16_t *> ( argv [ i ] ) );\
+			program_args [ i ] = std::move ( argument );\
+		}\
+	}\
+	Argon::lib_init ( std::move ( program_args ) ); \
+	LocalFree ( argv );\
 	EntryFunction();\
-	Argon::LibDeInit ();\
+	Argon::lib_deinit ();\
 	return 0;\
-};
+};\
 
 #endif

@@ -4,7 +4,4 @@
 #include <argon/osal/platforms/macosx/main.h>
 #include <argon/osal/platforms/macosx/windowsystem.h>
 
-void PlatformInit ();
-void PlatformDeInit ();
-
 #endif

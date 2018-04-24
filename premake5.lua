@@ -9,6 +9,7 @@ project "GFXTest"
 	targetdir "bin/GFXDebug/%{cfg.buildcfg}"
 	
 	files { "src/argon/**.h", "src/argon/**.c", "src/argon/**.cpp", "src/tests/GFXTestMain.cpp" }
+	excludes { "src/argon/osal/platforms/**" }
 	includedirs { "src" }
 	
 	filter { "files:**.m" }
@@ -17,14 +18,19 @@ project "GFXTest"
 		buildoutputs { "%{cfg.objdir}/%{file.basename}.o" }
 	
 	filter { "system:macosx" }
+		files { "src/argon/osal/platforms/macosx/*" }
 		files { "src/**.m" }
 		links { "OpenGL.framework", "Cocoa.framework", "Foundation.framework", "AppKit.framework", "objc" }
-	
-	filter "configurations:Debug"
+
+	filter { "system:windows" }
+		files { "src/argon/osal/platforms/windows/*" }
+		systemversion("10.0.15063.0")
+
+	filter { "configurations:Debug" }
 		defines { "DEBUG" }
 		symbols "On"
 
-	filter "configurations:Release"
+	filter { "configurations:Release" }
 		defines { "NDEBUG" }
 		optimize "On"
 	

@@ -34,6 +34,7 @@ namespace Argon
 		String ( const std::u32string & std_string );
 		
 		operator std::basic_string<char> () const;
+		operator std::basic_string<char16_t> () const;
 		
 		const Vector<char32_t> & get_chars () const;
 		
