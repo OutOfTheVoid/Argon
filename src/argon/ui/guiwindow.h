@@ -26,13 +26,14 @@ namespace Argon::UI
 		typedef uint32_t GUIWindowStyle;
 		
 		#if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
-		static const GUIWindowStyle kstyle_closable = Argon::OSAL::MacOSX::MacWindow::kstyle_closable;
 		static const GUIWindowStyle kstyle_minimizable = Argon::OSAL::MacOSX::MacWindow::kstyle_miniaturizable;
 		static const GUIWindowStyle kstyle_resizable = Argon::OSAL::MacOSX::MacWindow::kstyle_resizable;
-		static const GUIWindowStyle kstyle_framed = Argon::OSAL::MacOSX::MacWindow::kstyle_titled;
+		static const GUIWindowStyle kstyle_titled = Argon::OSAL::MacOSX::MacWindow::kstyle_titled;
 		#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
 		#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
-		
+		static const GUIWindowStyle kstyle_minimizable = OSAL::Windows::WinWindow::kstyle_minimizable;
+		static const GUIWindowStyle kstyle_maximizable = OSAL::Windows::WinWindow::kstyle_maximizable;
+		static const GUIWindowStyle kstyle_titled = OSAL::Windows::WinWindow::kstyle_titled;
 		#else
 		#endif
 		
@@ -40,6 +41,7 @@ namespace Argon::UI
 		
 		void show ();
 		void set_title ( const String & title );
+		void set_fullscreen ( bool fullscreen );
 		
 	private:
 		

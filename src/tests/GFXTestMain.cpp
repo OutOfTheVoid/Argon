@@ -36,6 +36,7 @@ void ApplicationLaunched ( void * data )
 	{
 		( * main_window_ptr ) -> show ();
 		( * main_window_ptr ) -> set_title ( "Hello world!" );
+		( * main_window_ptr ) -> set_fullscreen ( true );
 	}
 	
 };

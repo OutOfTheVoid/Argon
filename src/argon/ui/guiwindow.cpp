@@ -82,6 +82,13 @@ void Argon::UI::GUIWindow::set_title(const String & title)
 
 };
 
+void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
+{
+
+	os_window -> set_fullscreen ( fullscreen );
+
+};
+
 #else
 #endif
 

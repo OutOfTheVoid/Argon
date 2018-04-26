@@ -39,11 +39,14 @@ Argon::OSAL::Windows::WinWindow * Argon::OSAL::Windows::WinWindow::create ( Argo
 
 	WinWindow * window_instance = new WinWindow ();
 
+	window_instance -> ex_style_flags = WS_EX_CLIENTEDGE;
+	window_instance -> style_flags = WS_OVERLAPPEDWINDOW;
+
 	HWND window_handle = CreateWindowExW (
-		WS_EX_CLIENTEDGE,
+		window_instance -> ex_style_flags,
 		ARGON_OSAL_PLATFORMS_WINDOWS_WINDOW_CLASS_NAME,
 		L"Argon",
-		WS_OVERLAPPEDWINDOW,
+		window_instance -> style_flags,
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 		NULL, NULL, argon_osal_platforms_windows_get_application_hinstance (), NULL
 	);
@@ -64,7 +67,11 @@ Argon::OSAL::Windows::WinWindow * Argon::OSAL::Windows::WinWindow::create ( Argo
 
 Argon::OSAL::Windows::WinWindow::WinWindow ():
 	RefCounted ( 1 ),
-	window_handle ( nullptr )
+	window_handle ( nullptr ),
+	fullscreen ( false ),
+	style_flags ( 0 ),
+	ex_style_flags ( 0 ),
+	window_rect ()
 {
 };
 
@@ -92,6 +99,42 @@ void Argon::OSAL::Windows::WinWindow::set_title ( const Argon::String & title )
 	SetWindowText ( window_handle, (LPCWSTR) std_str_title.c_str () );
 
 }
+
+bool Argon::OSAL::Windows::WinWindow::set_fullscreen ( bool fullscreen )
+{
+
+	if ( this->fullscreen == fullscreen )
+		return true;
+
+	if ( fullscreen )
+	{
+
+		style_flags = GetWindowLong ( window_handle, GWL_STYLE );
+		ex_style_flags = GetWindowLong ( window_handle, GWL_EXSTYLE );
+		GetWindowRect ( window_handle, & window_rect );
+
+		SetWindowLong ( window_handle, GWL_STYLE, ( style_flags | WS_POPUP | WS_VISIBLE ) & ~ ( WS_CAPTION | WS_THICKFRAME ) );
+		SetWindowLong ( window_handle, GWL_EXSTYLE, ex_style_flags & ~ ( WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_STATICEDGE ) );
+
+		HMONITOR monitor = MonitorFromWindow ( window_handle, MONITOR_DEFAULTTONEAREST );
+		MONITORINFO monitor_info;
+		monitor_info.cbSize = sizeof ( monitor_info );
+		GetMonitorInfo ( monitor, & monitor_info );
+
+		RECT window_rect = monitor_info.rcMonitor;
+		SetWindowPos ( window_handle, NULL, window_rect.left, window_rect.top, window_rect.right - window_rect.left, window_rect.bottom - window_rect.top, SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED );
+
+	}
+	else
+	{
+
+		SetWindowLong ( window_handle, GWL_STYLE, style_flags );
+		SetWindowLong ( window_handle, GWL_EXSTYLE, ex_style_flags );
+		SetWindowPos ( window_handle, NULL, window_rect.left, window_rect.top, window_rect.right - window_rect.left, window_rect.bottom - window_rect.top, SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED );
+
+	}
+
+};
 
 LRESULT CALLBACK Argon::OSAL::Windows::WinWindow::window_proc ( HWND window_handle, UINT message, WPARAM message_w_param, LPARAM message_l_param )
 {
