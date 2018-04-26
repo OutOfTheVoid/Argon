@@ -190,14 +190,14 @@ extern void argon_osal_macosx_macwindow_set_title ( ObjcID ns_window_instance, c
 	
 	[title_string release];
 	
-}
+};
 
 extern void argon_osal_macosx_macwindow_make_key_and_order_front ( id ns_window_instance )
 {
 	
 	[(NSWindow *)ns_window_instance makeKeyAndOrderFront:nil];
 	
-}
+};
 
 extern void argon_osal_macosx_macwindow_order_front ( id ns_window_instance, bool regardless_of_application_focus )
 {
@@ -207,7 +207,78 @@ extern void argon_osal_macosx_macwindow_order_front ( id ns_window_instance, boo
 	else
 		[(NSWindow *)ns_window_instance orderFront:nil];
 	
+};
+
+extern void argon_osal_macosx_macwindow_get_frame ( id ns_window_instance, Argon_OSAL_MacOSX_WindowSystem_Rect * frame_rect )
+{
+	
+	NSRect frame = [(NSWindow *)ns_window_instance frame];
+	
+	frame_rect -> x = frame.origin.x;
+	frame_rect -> y = frame.origin.y;
+	frame_rect -> width = frame.size.width;
+	frame_rect -> height = frame.size.height;
+	
+};
+
+extern void argon_osal_macosx_macwindow_set_frame ( id ns_window_instance, Argon_OSAL_MacOSX_WindowSystem_Rect frame_rect )
+{
+	
+	NSRect frame;
+	frame.origin.x = frame_rect.x;
+	frame.origin.y = frame_rect.y;
+	frame.size.width = frame_rect.width;
+	frame.size.height = frame_rect.height;
+	
+	[(NSWindow *)ns_window_instance setFrame:frame display:YES animate:NO];
+	
+};
+
+extern void argon_osal_macosx_macwindow_set_frame_to_screen ( id ns_window_instance )
+{
+	
+	NSRect main_display_rect = [[NSScreen mainScreen] frame];
+	
+	[(NSWindow *)ns_window_instance setFrame:main_display_rect display:YES animate:NO];
+	[(NSWindow *)ns_window_instance setHidesOnDeactivate:YES];
+	
+};
+
+extern void argon_osal_macosx_macwindow_set_hides_on_deactivate ( id ns_window_instance, bool hides_on_deactivate )
+{
+	
+	[(NSWindow *)ns_window_instance setHidesOnDeactivate:hides_on_deactivate];
+	
 }
+
+extern void argon_osal_macosx_macwindow_set_window_level_plus ( id ns_window_instance, uint32_t level, uint32_t addition )
+{
+	
+	NSWindowLevel window_level;
+	
+	switch ( level )
+	{
+		
+		case MACOSX_WINDOWSYSTEM_WINDOW_LEVEL_NORMAL:
+			window_level = NSNormalWindowLevel + addition;
+			break;
+			
+		case MACOSX_WINDOWSYSTEM_WINDOW_LEVEL_MAIN_MENU:
+			window_level = NSMainMenuWindowLevel + addition;
+			break;
+			
+		case MACOSX_WINDOWSYSTEM_WINDOW_LEVEL_FLOATING:
+			window_level = NSFloatingWindowLevel + addition;
+			break;
+			
+		default:
+			return;
+		
+	}
+	
+	[(NSWindow *)ns_window_instance setLevel:window_level];
+	
+};
 
 extern id argon_osal_macosx_openglview_create ( unsigned int version, Argon_OSAL_MacOSX_WindowSystem_Rect frame_rect, ObjcID * ns_opengl_context_obj_instance )
 {

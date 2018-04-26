@@ -40,6 +40,13 @@ void Argon::UI::GUIWindow::set_title ( const String & title )
 	
 };
 
+void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
+{
+	
+	os_window -> set_fullscreen ( fullscreen );
+	
+};
+
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 

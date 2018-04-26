@@ -54,6 +54,13 @@ namespace Argon::Geometry
 		{
 		}
 		
+		static const Vec2F32 Zero;
+		static const Vec2F32 One;
+		static const Vec2F32 Left;
+		static const Vec2F32 Right;
+		static const Vec2F32 Up;
+		static const Vec2F32 Down;
+		
 	};
 	
 	class RectF32
@@ -62,6 +69,12 @@ namespace Argon::Geometry
 			
 		Vec2F32 origin;
 		Vec2F32 size;
+		
+		RectF32 ():
+			origin ( Vec2F32::Zero ),
+			size ( Vec2F32::Zero )
+		{
+		};
 		
 		RectF32 ( Vec2F32 origin, Vec2F32 size ):
 			origin ( origin ),

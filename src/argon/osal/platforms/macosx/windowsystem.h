@@ -101,7 +101,6 @@ namespace Argon::OSAL::MacOSX
 		static const uint32_t kstyle_resizable = MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_RESIZABLE;
 		static const uint32_t kstyle_textured_background = MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_TEXTURED_BACKGROUND;
 		static const uint32_t kstyle_unified_title_and_toolbar = MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_UNIFIED_TITLE_AND_TOOLBAR;
-		static const uint32_t kstyle_fullscreen = MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_FULLSCREEN;
 		static const uint32_t kstyle_full_size_content_view = MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_FULLSIZE_CONTENT_VIEW;
 		static const uint32_t kstyle_utility_window = MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_UTILITY_WINDOW;
 		static const uint32_t kstyle_doc_modal_window = MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_DOC_MODAL_WINDOW;
@@ -116,6 +115,7 @@ namespace Argon::OSAL::MacOSX
 		void make_key_and_order_front ();
 		void order_front ( bool regardless_of_application_focus );
 		void set_title ( const String & title );
+		void set_fullscreen ( bool fullscreen );
 		
 	private:
 		
@@ -123,6 +123,9 @@ namespace Argon::OSAL::MacOSX
 		
 		ObjcID ns_window_instance;
 		ObjcID ns_window_controller_instance;
+		
+		Argon_OSAL_MacOSX_WindowSystem_Rect non_fullscreen_rect;
+		bool fullscreen;
 		
 		IMacWindowView * view;
 		

@@ -15,6 +15,11 @@ extern "C" void argon_osal_macosx_macwindow_order_front ( ObjcID ns_window_insta
 extern "C" void argon_osal_macosx_macwindow_make_key_and_order_front ( ObjcID ns_window_instance );
 extern "C" void argon_osal_macosx_macwindow_set_view ( ObjcID ns_window_instance, ObjcID view_instance );
 extern "C" void argon_osal_macosx_macwindow_set_title ( ObjcID ns_window_instance, const char * title );
+extern "C" void argon_osal_macosx_macwindow_get_frame ( ObjcID ns_window_instance, Argon_OSAL_MacOSX_WindowSystem_Rect * frame_rect );
+extern "C" void argon_osal_macosx_macwindow_set_frame ( ObjcID ns_window_instance, Argon_OSAL_MacOSX_WindowSystem_Rect frame_rect );
+extern "C" void argon_osal_macosx_macwindow_set_window_level_plus ( ObjcID ns_window_instance, uint32_t level, uint32_t addition );
+extern "C" void argon_osal_macosx_macwindow_set_frame_to_screen ( ObjcID ns_window_instance );
+extern "C" void argon_osal_macosx_macwindow_set_hides_on_deactivate ( id ns_window_instance, bool hides_on_deactivate );
 
 extern "C" ObjcID argon_osal_macosx_openglview_create ( unsigned int version, Argon_OSAL_MacOSX_WindowSystem_Rect frame_rect, ObjcID * ns_opengl_context_obj_instance );
 extern "C" void argon_osal_macosx_openglview_set_draw_callback ( ObjcID ns_opengl_view_instance, void ( * callback )( void * ), void * callback_data );
@@ -176,6 +181,8 @@ Argon::OSAL::MacOSX::MacWindow::MacWindow ( ObjcID ns_window_instance, ObjcID ns
 	RefCounted ( 1 ),
 	ns_window_instance ( ns_window_instance ),
 	ns_window_controller_instance ( ns_window_controller_instance ),
+	non_fullscreen_rect (),
+	fullscreen ( false ),
 	view ( nullptr )
 {
 };
@@ -201,6 +208,34 @@ void Argon::OSAL::MacOSX::MacWindow::set_title ( const String & title )
 	
 	std::string std_string_title ( title );
 	argon_osal_macosx_macwindow_set_title ( ns_window_instance, std_string_title.c_str () );
+	
+}
+
+void Argon::OSAL::MacOSX::MacWindow::set_fullscreen ( bool fullscreen )
+{
+	
+	if ( this -> fullscreen != fullscreen )
+	{
+		
+		if ( fullscreen )
+		{
+			
+			argon_osal_macosx_macwindow_get_frame ( ns_window_instance, & non_fullscreen_rect );
+			argon_osal_macosx_macwindow_set_window_level_plus ( ns_window_instance, MACOSX_WINDOWSYSTEM_WINDOW_LEVEL_MAIN_MENU, 1 );
+			argon_osal_macosx_macwindow_set_frame_to_screen ( ns_window_instance );
+			argon_osal_macosx_macwindow_set_hides_on_deactivate ( ns_window_instance, true );
+			
+		}
+		else
+		{
+			
+			argon_osal_macosx_macwindow_set_window_level_plus ( ns_window_instance, MACOSX_WINDOWSYSTEM_WINDOW_LEVEL_NORMAL, 0 );
+			argon_osal_macosx_macwindow_set_frame ( ns_window_instance, non_fullscreen_rect );
+			argon_osal_macosx_macwindow_set_hides_on_deactivate ( ns_window_instance, false );
+			
+		}
+		
+	}
 	
 }
 
