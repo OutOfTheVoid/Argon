@@ -1,6 +1,8 @@
 #import <Cocoa/Cocoa.h>
 #import <AppKit/AppKit.h>
 #include <argon/osal/platforms/macosx/windowsystem_common.h>
+#import <mach-o/dyld.h>
+#import <stdlib.h>
 
 @interface Argon_OSAL_MacOSX_ExtNSOpenGLView : NSOpenGLView
 {
@@ -345,6 +347,18 @@ extern void argon_osal_macosx_opengl_context_flush ( id ns_opengl_context_obj_in
 	[(NSOpenGLContext *)ns_opengl_context_obj_instance flushBuffer];
 	
 }
+
+extern void * argon_osal_macosx_opengl_get_proc_address ( const char * symbol_name )
+{
+	
+	NSSymbol symbol;
+	
+	if ( NSIsSymbolNameDefined ( symbol_name ) ) // 4
+		symbol = NSLookupAndBindSymbol ( symbol_name );
+	
+	return symbol ? NSAddressOfSymbol ( symbol ) : NULL;
+	
+};
 
 extern void argon_osal_macosx_openglview_update ( ObjcID ns_opengl_view_instance )
 {

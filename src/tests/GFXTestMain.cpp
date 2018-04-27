@@ -34,9 +34,10 @@ void ApplicationLaunched ( void * data )
 
 	if ( ( * main_window_ptr ) != nullptr )
 	{
+		
 		( * main_window_ptr ) -> show ();
 		( * main_window_ptr ) -> set_title ( "Hello world!" );
-		//( * main_window_ptr ) -> set_fullscreen ( true );
+		
 	}
 	
 };

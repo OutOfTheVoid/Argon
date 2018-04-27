@@ -140,6 +140,16 @@ namespace Argon::OSAL::MacOSX
 		void make_current () const;
 		void flush_buffer () const;
 		
+		void * void_get_proc_address ( const String & gl_symbol ) const;
+		
+		template <typename T>
+		inline T get_proc_address ( const String & gl_symbol ) const
+		{
+			
+			return reinterpret_cast<T> ( void_get_proc_address ( gl_symbol ) );
+			
+		};
+		
 	private:
 		
 		friend class MacGLView;
