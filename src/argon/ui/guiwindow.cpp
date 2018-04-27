@@ -11,7 +11,7 @@ Argon::UI::GUIWindow * Argon::UI::GUIWindow::create ( const Rect & content_frame
 	if ( OSAL::MacOSX::MacApplication::get_shared_instance () == nullptr )
 		return nullptr;
 	
-	MacWindow * mac_window_instance = MacWindow::create ( content_frame, style );
+	MacWindow * mac_window_instance = MacWindow::create ( content_frame, style | MacWindow::kstyle_closable );
 	
 	if ( mac_window_instance == nullptr )
 		return nullptr;

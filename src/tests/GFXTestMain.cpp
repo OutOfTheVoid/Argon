@@ -30,13 +30,13 @@ void ApplicationLaunched ( void * data )
 	
 	GUIWindow ** main_window_ptr = reinterpret_cast <GUIWindow **> ( data );
 
-	* main_window_ptr = GUIWindow::create ( { { 400, 400 }, { 600, 400 } }, 0 );
+	* main_window_ptr = GUIWindow::create ( { { 400, 400 }, { 600, 0 } }, GUIWindow::kstyle_titled | GUIWindow::kstyle_resizable | GUIWindow::kstyle_minimizable );
 
 	if ( ( * main_window_ptr ) != nullptr )
 	{
 		( * main_window_ptr ) -> show ();
 		( * main_window_ptr ) -> set_title ( "Hello world!" );
-		( * main_window_ptr ) -> set_fullscreen ( true );
+		//( * main_window_ptr ) -> set_fullscreen ( true );
 	}
 	
 };

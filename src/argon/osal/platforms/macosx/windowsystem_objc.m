@@ -135,7 +135,7 @@ extern id argon_osal_macosx_macmenu_create_1 ( const char * title )
 extern id argon_osal_macosx_macwindow_create_1 ( Argon_OSAL_MacOSX_WindowSystem_Rect content_rect, uint32_t style_flags, id * window_controller_instance )
 {
 	
-	NSRect window_rect = NSMakeRect ( content_rect.x, content_rect.y, content_rect.width, content_rect.height );
+	NSRect content_frame = NSMakeRect ( content_rect.x, content_rect.y, content_rect.width, content_rect.height );
 	
 	NSWindowStyleMask style_mask =
 		( ( style_flags & MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_BORDERLESS ) ? NSWindowStyleMaskBorderless : 0 ) |
@@ -152,7 +152,6 @@ extern id argon_osal_macosx_macwindow_create_1 ( Argon_OSAL_MacOSX_WindowSystem_
 		( ( style_flags & MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_NONACTIVATING_PANEL ) ? NSWindowStyleMaskNonactivatingPanel : 0 ) |
 		( ( style_flags & MACOSX_WINDOWSYSTEM_WINDOW_STYLE_MASK_HUD_WINDOW ) ? NSWindowStyleMaskHUDWindow : 0 );
 	
-	NSRect content_frame = [NSWindow contentRectForFrameRect:window_rect styleMask:style_mask];
 	NSWindow * ns_window_instance = [[NSWindow alloc] initWithContentRect:content_frame styleMask:style_mask backing:NSBackingStoreBuffered defer:NO];
 	
 	if ( ns_window_instance == nil )
