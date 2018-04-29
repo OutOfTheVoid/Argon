@@ -1,3 +1,7 @@
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
+
 #include <argon/osal/platforms/macosx/windowsystem.h>
 #include <argon/osal/platforms/macosx/windowsystem_common.h>
 
@@ -360,3 +364,5 @@ void * Argon::OSAL::MacOSX::MacGLContextObj::void_get_proc_address ( const Strin
 	return argon_osal_macosx_opengl_get_proc_address ( std_string_gl_symbol.c_str () );
 	
 }
+
+#endif

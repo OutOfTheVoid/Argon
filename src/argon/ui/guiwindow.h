@@ -2,17 +2,10 @@
 #define ARGON_UI_GUIWINDOW_H
 
 #include <argon/osal/osal.h>
+#include <argon/osal/windowsystem.h>
 
 #include <argon/memory/refcounted.h>
 #include <argon/geometry/geometry.h>
-
-#if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
-#include <argon/osal/platforms/macosx/windowsystem.h>
-#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
-#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
-#include <argon/osal/platforms/windows/windowsystem.h>
-#else
-#endif
 
 namespace Argon::UI
 {
@@ -30,6 +23,9 @@ namespace Argon::UI
 		static const GUIWindowStyle kstyle_resizable = Argon::OSAL::MacOSX::MacWindow::kstyle_resizable;
 		static const GUIWindowStyle kstyle_titled = Argon::OSAL::MacOSX::MacWindow::kstyle_titled;
 		#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
+		static const GUIWindowStyle kstyle_minimizable = 0;
+		static const GUIWindowStyle kstyle_resizable = 0;
+		static const GUIWindowStyle kstyle_titled = 0;
 		#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 		static const GUIWindowStyle kstyle_minimizable = OSAL::Windows::WinWindow::kstyle_minimizable;
 		static const GUIWindowStyle kstyle_maximizable = OSAL::Windows::WinWindow::kstyle_maximizable;
@@ -53,7 +49,14 @@ namespace Argon::UI
 		
 		OSAL::MacOSX::MacWindow * os_window;
 		
-		#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
+		#endif
+		
+		#if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
+		
+		GUIWindow ( OSAL::Linux::LinuxWindow * os_window );
+		
+		OSAL::Linux::LinuxWindow * os_window;
+		
 		#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 
 		GUIWindow ( OSAL::Windows::WinWindow * os_window );

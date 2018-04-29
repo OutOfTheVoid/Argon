@@ -1,6 +1,10 @@
 #ifndef ARGON_OSAL_OSX_MAIN_H
 #define ARGON_OSAL_OSX_MAIN_H
 
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
+
 #include <argon/argon.h>
 
 #define OSAL_BUILD_MAIN_METHOD(EntryFunction)\
@@ -15,4 +19,5 @@ int main ( int argc, const char * argv [] )\
 	return 0;\
 }
 
+#endif
 #endif

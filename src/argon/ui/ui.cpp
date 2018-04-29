@@ -1,14 +1,8 @@
 #include <argon/ui/ui.h>
 
 #include <argon/osal/osal.h>
+#include <argon/osal/windowsystem.h>
 
-#if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
-#include <argon/osal/platforms/macosx/windowsystem.h>
-#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
-#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
-#include <argon/osal/platforms/windows/windows.h>
-#else
-#endif
 
 void Argon::UI::application_runloop ( ApplicationInitOptions & init_options )
 {
@@ -22,6 +16,30 @@ void Argon::UI::application_runloop ( ApplicationInitOptions & init_options )
 	MacApplication::get_shared_instance () -> run ();
 	
 	#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
+	
+	using OSAL::Linux::LinuxApplication;
+	
+	LinuxApplication * application_instance = LinuxApplication::get_shared_instance ();
+	
+	XEvent x_event;
+	
+	if ( init_options.application_started_callback != nullptr )
+		init_options.application_started_callback ( init_options.application_started_data );
+	
+	while ( true )
+	{
+		
+		while ( XPending ( application_instance -> display ) )
+		{
+			
+			XNextEvent ( application_instance -> display, & x_event );
+			
+			// Handle events..
+			
+		}
+		
+	}
+	
 	#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 
 	if ( init_options.application_started_callback != nullptr )

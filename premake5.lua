@@ -9,10 +9,9 @@ project "GFXTest"
 	targetdir "bin/GFXDebug/%{cfg.buildcfg}"
 	
 	files { "src/argon/**.h", "src/argon/**.c", "src/argon/**.cpp", "src/tests/GFXTestMain.cpp" }
-	excludes { "src/argon/osal/platforms/**" }
 	includedirs { "src" }
 	
-	filter { "files:**.m" }
+	filter { "system:macosx","files:**.m" }
 		buildmessage '%{file.basename}.m'
 		prebuildcommands { 'llvm-gcc "%{file.relpath}" -c -o "%{cfg.objdir}/%{file.basename}.o"' }
 		buildoutputs { "%{cfg.objdir}/%{file.basename}.o" }
@@ -25,6 +24,9 @@ project "GFXTest"
 	filter { "system:windows" }
 		files { "src/argon/osal/platforms/windows/*" }
 		systemversion("10.0.15063.0")
+		
+	filter { "system:linux" }
+		links { "X11", "GL" }
 
 	filter { "configurations:Debug" }
 		defines { "DEBUG" }

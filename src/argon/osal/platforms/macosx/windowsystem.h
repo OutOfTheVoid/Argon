@@ -1,6 +1,11 @@
 #ifndef ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_H
 #define ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_H
 
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
+
+
 #include <argon/osal/platforms/macosx/objc.h>
 #include <argon/osal/platforms/macosx/windowsystem_common.h>
 
@@ -229,5 +234,5 @@ namespace Argon::OSAL::MacOSX
 };
 
 
-
+#endif
 #endif

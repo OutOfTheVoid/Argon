@@ -2,6 +2,7 @@
 #define ARGON_STRING_H
 
 #include <string>
+#include <cstring>
 #include <argon/vector.h>
 #include <stdint.h>
 

@@ -48,19 +48,56 @@ void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
 };
 
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
+
+Argon::UI::GUIWindow::GUIWindow ( OSAL::Linux::LinuxWindow * os_window ):
+	RefCounted ( 1 ),
+	os_window ( os_window )
+{
+};
+
+Argon::UI::GUIWindow * Argon::UI::GUIWindow::create ( const Rect & content_frame, GUIWindowStyle style )
+{
+	
+	using OSAL::Linux::LinuxWindow;
+	
+	LinuxWindow * os_window = LinuxWindow::create ( content_frame, 0 );
+	
+	if ( os_window == nullptr )
+		return nullptr;
+	
+	return new GUIWindow ( os_window );
+	
+}
+
+void Argon::UI::GUIWindow::show ()
+{
+	
+	os_window -> show ();
+	
+};
+
+void Argon::UI::GUIWindow::set_title ( const String & title )
+{
+	
+	os_window -> set_title ( title );
+	
+};
+
+void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
+{
+	
+	// TODO: Implement
+	
+};
+
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 
-#include <iostream>
-
-//TODO
 Argon::UI::GUIWindow * Argon::UI::GUIWindow::create(const Rect & content_frame, GUIWindowStyle style)
 {
 	
 	using OSAL::Windows::WinWindow;
 
 	WinWindow * os_window = WinWindow::create ( content_frame, 0 );
-
-	std::cout << "os_window: " << os_window << "\n";
 
 	if ( os_window != nullptr )
 		return new GUIWindow ( os_window );

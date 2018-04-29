@@ -1,3 +1,7 @@
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
+
 #include <argon/osal/platforms/windows/windows.h>
 
 HINSTANCE argon_osal_platforms_windows_get_application_hinstance ()
@@ -11,3 +15,5 @@ HINSTANCE argon_osal_platforms_windows_get_application_hinstance ()
 	return hinstance_value;
 
 }
+
+#endif

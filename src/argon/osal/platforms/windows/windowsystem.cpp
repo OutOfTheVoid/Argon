@@ -1,3 +1,7 @@
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
+
 #include <argon/osal/platforms/windows/windowsystem.h>
 
 WNDCLASSEX Argon::OSAL::Windows::WinWindow::window_class_inst = { 0 };
@@ -142,3 +146,5 @@ LRESULT CALLBACK Argon::OSAL::Windows::WinWindow::window_proc ( HWND window_hand
 	return DefWindowProc ( window_handle, message, message_w_param, message_l_param );
 
 };
+
+#endif

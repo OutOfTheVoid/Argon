@@ -1,6 +1,10 @@
 #ifndef ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_COMMON_H
 #define ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_COMMON_H
 
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
+
 #include <argon/osal/platforms/macosx/objc.h>
 
 #include <stdint.h>
@@ -41,4 +45,5 @@ typedef struct
 	
 } Argon_OSAL_MacOSX_WindowSystem_Rect;
 
+#endif
 #endif

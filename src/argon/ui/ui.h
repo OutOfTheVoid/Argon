@@ -1,8 +1,6 @@
 #ifndef ARGON_UI_UI_H
 #define ARGON_UI_UI_H
 
-#include <argon/ui/guiwindow.h>
-
 namespace Argon::UI
 {
 	

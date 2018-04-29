@@ -1,6 +1,10 @@
 #ifndef ARGON_OSAL_PLATFORMS_WINDOWS_WINDOWSYSTEM_H
 #define ARGON_OSAL_PLATFORMS_WINDOWS_WINDOWSYSTEM_H
 
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
+
 #include <argon/osal/platforms/windows/windows.h>
 
 #include <argon/geometry/geometry.h>
@@ -47,4 +51,5 @@ namespace Argon::OSAL::Windows
 
 }
 
+#endif
 #endif

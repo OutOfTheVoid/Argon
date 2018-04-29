@@ -1,6 +1,10 @@
 #ifndef ARGON_OSAL_PLATFORMS_WINDOWS_MAIN_H
 #define ARGON_OSAL_PLATFORMS_WINDOWS_MAIN_H
 
+#include <argon/osal/osal.h>
+
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
+
 #include <argon/argon.h>
 
 #include <Windows.h>
@@ -28,4 +32,5 @@ int main () \
 	return 0;\
 };\
 
+#endif
 #endif
