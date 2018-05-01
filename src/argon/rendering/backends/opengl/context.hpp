@@ -6,12 +6,14 @@
 namespace Argon::Rendering::OpenGL
 {
 	
-	class IContext
+	class IGLContext
 	{
-	public:	
+	public:
 		
+		virtual void make_current () const = 0;
+		virtual void flush_back_buffer () const = 0;
 		
-		
+		virtual void * void_gl_get_proc_address ( const String & gl_symbol ) const = 0;
 		
 	};
 	

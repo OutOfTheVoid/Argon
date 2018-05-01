@@ -1,7 +1,7 @@
 #ifndef ARGON_OSAL_PLATFORMS_MACOSX_MACOSX_HPP
 #define ARGON_OSAL_PLATFORMS_MACOSX_MACOSX_HPP
 
-#include <argon/osal/osal.hpp>
+#include <argon/osal/targets.h>
 
 #if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 

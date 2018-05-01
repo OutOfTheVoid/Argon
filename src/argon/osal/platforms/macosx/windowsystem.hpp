@@ -1,7 +1,7 @@
 #ifndef ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_HPP
 #define ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_HPP
 
-#include <argon/osal/osal.hpp>
+#include <argon/osal/targets.h>
 
 #if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 
@@ -13,6 +13,8 @@
 #include <argon/argon.hpp>
 
 #include <argon/memory/refcounted.hpp>
+
+#include <argon/rendering/backends/opengl/context.hpp>
 
 void PlatformDeInit ();
 
@@ -136,22 +138,22 @@ namespace Argon::OSAL::MacOSX
 		
 	};
 	
-	class MacGLContextObj
+	class MacGLContextObj : public virtual Argon::Rendering::OpenGL::IGLContext
 	{
 	public:
 		
 		MacGLContextObj ( ObjcID ns_opengl_context_obj_instance );
 		
 		void make_current () const;
-		void flush_buffer () const;
+		void flush_back_buffer () const;
 		
-		void * void_get_proc_address ( const String & gl_symbol ) const;
+		void * void_gl_get_proc_address ( const String & gl_symbol ) const;
 		
 		template <typename T>
 		inline T get_proc_address ( const String & gl_symbol ) const
 		{
 			
-			return reinterpret_cast<T> ( void_get_proc_address ( gl_symbol ) );
+			return reinterpret_cast<T> ( void_gl_get_proc_address ( gl_symbol ) );
 			
 		};
 		
@@ -159,7 +161,7 @@ namespace Argon::OSAL::MacOSX
 		
 		friend class MacGLView;
 		
-		~MacGLContextObj ();
+		virtual ~MacGLContextObj ();
 		
 		ObjcID ns_opengl_context_obj_instance;
 		

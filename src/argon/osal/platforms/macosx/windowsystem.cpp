@@ -345,7 +345,7 @@ void Argon::OSAL::MacOSX::MacGLContextObj::make_current () const
 	
 }
 
-void Argon::OSAL::MacOSX::MacGLContextObj::flush_buffer () const
+void Argon::OSAL::MacOSX::MacGLContextObj::flush_back_buffer () const
 {
 	
 	argon_osal_macosx_opengl_context_flush ( ns_opengl_context_obj_instance );
@@ -354,7 +354,7 @@ void Argon::OSAL::MacOSX::MacGLContextObj::flush_buffer () const
 
 #include <dlfcn.h>
 
-void * Argon::OSAL::MacOSX::MacGLContextObj::void_get_proc_address ( const String & gl_symbol ) const
+void * Argon::OSAL::MacOSX::MacGLContextObj::void_gl_get_proc_address ( const String & gl_symbol ) const
 {
 	
 	String gl_symbol_prefixed ( "_" );
