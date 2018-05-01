@@ -31,17 +31,14 @@ Argon::OSAL::Linux::LinuxWindow * Argon::OSAL::Linux::LinuxWindow::create ( cons
 	if ( application_instance == nullptr )
 		return nullptr;
 	
-	int screen = DefaultScreen ( application_instance -> display );
+	GLint gl_attributes [] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
 	
-	GLint gl_attributes [] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, True };
-	
-	XVisualInfo * visual_info = glXChooseVisual ( application_instance -> display, screen, gl_attributes );
-	
+	XVisualInfo * visual_info = glXChooseVisual ( application_instance -> display, 0, gl_attributes );
 	Colormap color_map = XCreateColormap ( application_instance -> display, application_instance -> root_window, visual_info -> visual, AllocNone );
 	
 	XSetWindowAttributes window_attributes;
-	window_attributes.event_mask = ExposureMask | KeyPressMask;
 	window_attributes.colormap = color_map;
+	window_attributes.event_mask = ExposureMask | KeyPressMask;
 	
 	Window window_instance = XCreateWindow (
 		application_instance -> display,
@@ -51,7 +48,7 @@ Argon::OSAL::Linux::LinuxWindow * Argon::OSAL::Linux::LinuxWindow::create ( cons
 		0, visual_info -> depth, InputOutput, visual_info -> visual, CWColormap | CWEventMask, & window_attributes );
 	
 	
-	return new LinuxWindow ( 0, application_instance -> display );
+	return new LinuxWindow ( window_instance, application_instance -> display );
 	
 };
 

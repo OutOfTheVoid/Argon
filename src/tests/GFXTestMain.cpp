@@ -34,7 +34,7 @@ void ApplicationLaunched ( void * data )
 	
 	std :: cout << "window: " << ( * main_window_ptr ) << std :: endl;
 
-	/*if ( ( * main_window_ptr ) != nullptr )
+	if ( ( * main_window_ptr ) != nullptr )
 	{
 		
 		std :: cout << "window allocated successfully!" << std :: endl;
@@ -42,7 +42,7 @@ void ApplicationLaunched ( void * data )
 		( * main_window_ptr ) -> show ();
 		( * main_window_ptr ) -> set_title ( "Hello world!" );
 		
-	}*/
+	}
 	
 };
 
