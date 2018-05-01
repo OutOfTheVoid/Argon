@@ -1,11 +1,11 @@
-#ifndef ARGON_UI_GUIWINDOW_H
-#define ARGON_UI_GUIWINDOW_H
+#ifndef ARGON_UI_GUIWINDOW_HPP
+#define ARGON_UI_GUIWINDOW_HPP
 
-#include <argon/osal/osal.h>
-#include <argon/osal/windowsystem.h>
+#include <argon/osal/osal.hpp>
+#include <argon/osal/windowsystem.hpp>
 
-#include <argon/memory/refcounted.h>
-#include <argon/geometry/geometry.h>
+#include <argon/memory/refcounted.hpp>
+#include <argon/geometry/geometry.hpp>
 
 namespace Argon::UI
 {

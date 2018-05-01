@@ -8,7 +8,7 @@ project "GFXTest"
 	cdialect "C11"
 	targetdir "bin/GFXDebug/%{cfg.buildcfg}"
 	
-	files { "src/argon/**.h", "src/argon/**.c", "src/argon/**.cpp", "src/tests/GFXTestMain.cpp" }
+	files { "src/argon/**.h", "src/argon/**.hpp", "src/argon/**.c", "src/argon/**.cpp", "src/tests/GFXTestMain.cpp" }
 	includedirs { "src" }
 	
 	filter { "system:macosx","files:**.m" }

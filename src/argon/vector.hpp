@@ -1,5 +1,15 @@
-#ifndef ARGON_VECTOR_H
-#define ARGON_VECTOR_H
+#ifndef ARGON_VECTOR_HPP
+#define ARGON_VECTOR_HPP
+
+/*
+*==================================================*
+* Argon::Vector<T>                                 *
+*==================================================*
+* Argon::Vector<T> is the basic dynamic array
+* type in argon, allowing for easy dynamic array
+* behavior.
+*
+*/
 
 namespace Argon
 {
@@ -14,6 +24,7 @@ namespace Argon
 			NoInit
 		};
 		
+		// empty/minimal init constructor - mostly useful for swapping.
 		Vector ( NO_INIT no_init ):
 			capacity ( 0 ),
 			count ( 0 ),
@@ -21,6 +32,7 @@ namespace Argon
 		{
 		};
 		
+		// default constructor - allocates a store of 100 elements by defailt.
 		Vector ():
 			capacity ( 100 ),
 			count ( 0 ),
@@ -28,6 +40,7 @@ namespace Argon
 		{
 		};
 		
+		// sized constructor - allocate space for <capacity> elements initially.
 		Vector ( size_t capacity ):
 			capacity ( capacity ),
 			count ( 0 ),
@@ -35,6 +48,7 @@ namespace Argon
 		{
 		};
 		
+		// c-style array constructor - convert a c style array to an Argon::Vector
 		Vector ( T * elements, size_t count ):
 			capacity ( count ),
 			count ( 0 ),
@@ -51,6 +65,7 @@ namespace Argon
 			
 		};
 		
+		// c-style array constructor - convert a c style array to an Argon::Vector with room for <additional_capacity> extra elements
 		Vector ( T * elements, size_t count, size_t additional_capacity ):
 			capacity ( count + additional_capacity ),
 			count ( count ),
@@ -62,6 +77,7 @@ namespace Argon
 			
 		};
 		
+		// copy constructor
 		Vector ( const Vector<T> & elements ):
 			capacity ( elements.capacity ),
 			count ( elements.count ),
@@ -73,6 +89,7 @@ namespace Argon
 			
 		};
 		
+		// move constructor
 		Vector ( Vector<T> && moved ):
 			capacity ( moved.capacity ),
 			count ( moved.count ),
@@ -85,6 +102,7 @@ namespace Argon
 			
 		};
 		
+		// move operator
 		void operator= ( Vector<T> && moved )
 		{
 			
@@ -94,6 +112,7 @@ namespace Argon
 			
 		};
 		
+		// copy constructor plus - copy of the vector <elements> with <additional_capacity> extra elements of storage
 		Vector ( const Vector<T> & elements, size_t additional_capacity ):
 			capacity ( elements.capacity + additional_capacity ),
 			count ( elements.count ),
@@ -105,6 +124,7 @@ namespace Argon
 			
 		};
 		
+		// get the count of the vector
 		size_t get_count () const
 		{
 			
@@ -112,6 +132,7 @@ namespace Argon
 			
 		};
 		
+		// get the capacity of the vector
 		size_t get_capacity () const
 		{
 			
@@ -119,6 +140,7 @@ namespace Argon
 			
 		};
 		
+		// raw element accessor
 		const T & operator[] ( int32_t index ) const
 		{
 			
@@ -133,6 +155,7 @@ namespace Argon
 			
 		};
 		
+		// push a value onto the vector, allocating more room if necessary
 		void push ( T value )
 		{
 			
@@ -144,6 +167,7 @@ namespace Argon
 			
 		};
 		
+		// pop an element off the vector
 		T pop ()
 		{
 			
@@ -152,6 +176,7 @@ namespace Argon
 			
 		};
 		
+		// peek at the top element of the vector
 		T & peek ()
 		{
 			
@@ -166,6 +191,7 @@ namespace Argon
 			
 		};
 		
+		// push an entire vector of values into this vector by copying them.
 		void push ( const Vector<T> & values )
 		{
 			
@@ -178,6 +204,7 @@ namespace Argon
 			
 		};
 		
+		// remove an item at an index from this vector
 		void remove ( size_t index )
 		{
 			
@@ -191,6 +218,7 @@ namespace Argon
 			
 		};
 		
+		// remove n items at an index from this vector
 		void remove ( size_t index, size_t count )
 		{
 			

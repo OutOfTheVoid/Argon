@@ -1,14 +1,14 @@
-#ifndef ARGON_OSAL_PLATFORMS_WINDOWS_WINDOWSYSTEM_H
-#define ARGON_OSAL_PLATFORMS_WINDOWS_WINDOWSYSTEM_H
+#ifndef ARGON_OSAL_PLATFORMS_WINDOWS_WINDOWSYSTEM_HPP
+#define ARGON_OSAL_PLATFORMS_WINDOWS_WINDOWSYSTEM_HPP
 
-#include <argon/osal/osal.h>
+#include <argon/osal/targets.h>
 
 #if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 
-#include <argon/osal/platforms/windows/windows.h>
+#include <argon/osal/platforms/windows/windows.hpp>
 
-#include <argon/geometry/geometry.h>
-#include <argon/memory/refcounted.h>
+#include <argon/geometry/geometry.hpp>
+#include <argon/memory/refcounted.hpp>
 
 namespace Argon::OSAL::Windows
 {

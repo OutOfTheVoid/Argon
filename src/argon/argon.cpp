@@ -1,4 +1,4 @@
-#include <argon/argon.h>
+#include <argon/argon.hpp>
 
 Argon::Array<Argon::String> ProgramArguments ( Argon::Array<Argon::String>::NoInit );
 

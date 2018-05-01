@@ -1,6 +1,6 @@
-#include <argon/argon.h>
-#include <argon/ui/guiwindow.h>
-#include <argon/ui/ui.h>
+#include <argon/argon.hpp>
+#include <argon/ui/guiwindow.hpp>
+#include <argon/ui/ui.hpp>
 
 #include <iostream>
 

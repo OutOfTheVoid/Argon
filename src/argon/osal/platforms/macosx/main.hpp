@@ -1,11 +1,11 @@
-#ifndef ARGON_OSAL_LINUX_MAIN_H
-#define ARGON_OSAL_LINUX_MAIN_H
+#ifndef ARGON_OSAL_OSX_MAIN_HPP
+#define ARGON_OSAL_OSX_MAIN_HPP
 
-#include <argon/osal/osal.h>
+#include <argon/osal/osal.hpp>
 
-#if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
+#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 
-#include <argon/argon.h>
+#include <argon/argon.hpp>
 
 #define OSAL_BUILD_MAIN_METHOD(EntryFunction)\
 int main ( int argc, const char * argv [] )\

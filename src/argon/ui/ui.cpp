@@ -1,7 +1,7 @@
-#include <argon/ui/ui.h>
+#include <argon/ui/ui.hpp>
 
-#include <argon/osal/osal.h>
-#include <argon/osal/windowsystem.h>
+#include <argon/osal/osal.hpp>
+#include <argon/osal/windowsystem.hpp>
 
 
 void Argon::UI::application_runloop ( ApplicationInitOptions & init_options )

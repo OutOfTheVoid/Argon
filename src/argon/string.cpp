@@ -1,4 +1,4 @@
-#include <argon/string.h>
+#include <argon/string.hpp>
 
 Argon::String::String ():
 	chars ()
@@ -351,6 +351,13 @@ const Argon::Vector<char32_t> & Argon::String::get_chars () const
 	
 };
 
+Argon::Vector<char32_t> & Argon::String::get_chars ()
+{
+	
+	return chars;
+	
+};
+
 size_t Argon::String::get_count () const
 {
 	
@@ -365,7 +372,7 @@ void Argon::String::append ( const String & value )
 	
 }
 
-Argon::String Argon::String::sub_string ( size_t index, size_t count )
+Argon::String Argon::String::sub_string ( size_t index, size_t count ) const
 {
 	
 	size_t src_count = chars.get_count ();

@@ -1,5 +1,5 @@
-#ifndef ARGON_UI_UI_H
-#define ARGON_UI_UI_H
+#ifndef ARGON_UI_UI_HPP
+#define ARGON_UI_UI_HPP
 
 namespace Argon::UI
 {

@@ -1,6 +1,5 @@
-#ifndef ARGON_OSAL_OSAL_H
-#define ARGON_OSAL_OSAL_H
-
+#ifndef ARGON_OSAL_TARGETS_H
+#define ARGON_OSAL_TARGETS_H
 
 #define ARGON_PLATFORM_OS_VALUE_WINDOWS 1
 #define ARGON_PLATFORM_OS_VALUE_MACOSX 2
@@ -30,7 +29,6 @@
 		#define ARGON_PLATFORM_OS_RUNMODE ARGON_PLATFORM_OS_IOS_RUNMODE_HARDWARE
 	#elif TARGET_OS_MAC == 1
 		#define ARGON_PLATFORM_OS ARGON_PLATFORM_OS_VALUE_MACOSX
-		#include <argon/osal/platforms/macosx/macosx.h>
 	#endif
 #endif
 

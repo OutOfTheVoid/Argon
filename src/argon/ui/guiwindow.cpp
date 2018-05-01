@@ -1,4 +1,4 @@
-#include <argon/ui/guiwindow.h>
+#include <argon/ui/guiwindow.hpp>
 
 #if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 

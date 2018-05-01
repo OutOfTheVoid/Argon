@@ -1,8 +1,20 @@
-#ifndef ARGON_ARRAY_H
-#define ARGON_ARRAY_H
+#ifndef ARGON_ARRAY_HPP
+#define ARGON_ARRAY_HPP
 
-#include <cstddef>
-#include <utility>
+#include <stddef.h>
+#include <algorithm>
+
+/*
+*===============================*
+* Argon::Array<T> - basic array *
+*===============================*
+* Argon fixed-size array wrapper
+* which simply keeps track of
+* the array's length for
+* (slightly) more safe array
+* usage and auxiliary
+* functionality.
+*/
 
 namespace Argon
 {
@@ -17,19 +29,22 @@ namespace Argon
 			NoInit
 		};
 		
-		Array ( NO_INIT no_init ):
+		// construct an empty/null array. (no-op)
+		inline Array ( NO_INIT no_init ):
 			length ( 0 ),
 			elements ( nullptr )
 		{
 		}
 		
-		Array ( size_t length ):
+		// construct an array with <length> elements
+		inline Array ( size_t length ):
 			length ( length ),
 			elements ( new T [ length ] )
 		{
 		};
 		
-		Array ( Array<T> && moved ):
+		// move constructor
+		inline Array ( Array<T> && moved ):
 			length ( moved.length ),
 			elements ( moved.elements )
 		{
@@ -39,7 +54,8 @@ namespace Argon
 			
 		};
 		
-		void operator= ( Array<T> && moved )
+		// move operator
+		inline void operator= ( Array<T> && moved )
 		{
 			
 			std::swap ( elements, moved.elements );
@@ -47,6 +63,7 @@ namespace Argon
 			
 		}
 		
+		// convert raw-c-style array to wrapped array - allocating
 		Array ( const T * values, size_t length ):
 			length ( length ),
 			elements ( new T [ length ] )
@@ -57,6 +74,7 @@ namespace Argon
 			
 		};
 		
+		// copy constructor
 		Array ( const Array<T> & copy ):
 			length ( copy.length ),
 			elements ( new T [ length ] )
@@ -67,6 +85,7 @@ namespace Argon
 			
 		};
 		
+		// destructor
 		~Array ()
 		{
 			
@@ -74,21 +93,24 @@ namespace Argon
 			
 		}
 		
-		size_t GetLength () const
+		// get array length
+		inline size_t get_length () const
 		{
 			
 			return length;
 			
 		}
 		
-		const T & operator[] ( size_t index ) const
+		// array accessor - const
+		inline const T & operator[] ( size_t index ) const
 		{
 			
 			return elements [ index ];
 			
 		};
 		
-		T & operator[] ( size_t index )
+		// array accessor
+		inline T & operator[] ( size_t index )
 		{
 			
 			return elements [ index ];

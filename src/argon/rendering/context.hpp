@@ -1,5 +1,5 @@
-#ifndef ARGON_RENDERING_CONTEXT_H
-#define ARGON_RENDERING_CONTEXT_H
+#ifndef ARGON_RENDERING_CONTEXT_HPP
+#define ARGON_RENDERING_CONTEXT_HPP
 
 #include <argon/memory/ref_counted.h>
 

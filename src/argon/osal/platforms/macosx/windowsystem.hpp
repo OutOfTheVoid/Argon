@@ -1,7 +1,7 @@
-#ifndef ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_H
-#define ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_H
+#ifndef ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_HPP
+#define ARGON_OSAL_PLATFORMS_MACOSX_WINDOWSYSTEM_HPP
 
-#include <argon/osal/osal.h>
+#include <argon/osal/osal.hpp>
 
 #if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 
@@ -9,10 +9,10 @@
 #include <argon/osal/platforms/macosx/objc.h>
 #include <argon/osal/platforms/macosx/windowsystem_common.h>
 
-#include <argon/geometry/geometry.h>
-#include <argon/argon.h>
+#include <argon/geometry/geometry.hpp>
+#include <argon/argon.hpp>
 
-#include <argon/memory/refcounted.h>
+#include <argon/memory/refcounted.hpp>
 
 void PlatformDeInit ();
 

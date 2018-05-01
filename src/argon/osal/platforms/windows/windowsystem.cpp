@@ -1,4 +1,4 @@
-#include <argon/osal/osal.h>
+#include <argon/osal/targets.h>
 
 #if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 

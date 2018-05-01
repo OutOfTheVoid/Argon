@@ -1,8 +1,8 @@
-#include <argon/osal/osal.h>
+#include <argon/osal/targets.h>
 
 #if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
 
-#include <argon/osal/platforms/linux/windowsystem.h>
+#include <argon/osal/platforms/linux/windowsystem.hpp>
 
 
 Argon::OSAL::Linux::LinuxWindow::LinuxWindow ( Window window_instance, Display * display ):

@@ -1,22 +1,22 @@
-#ifndef ARGON_OSAL_PLATFORMS_LINUX_WINDOWSYSTEM_H
-#define ARGON_OSAL_PLATFORMS_LINUX_WINDOWSYSTEM_H
+#ifndef ARGON_OSAL_PLATFORMS_LINUX_WINDOWSYSTEM_HPP
+#define ARGON_OSAL_PLATFORMS_LINUX_WINDOWSYSTEM_HPP
 
-#include <argon/osal/osal.h>
+#include <argon/osal/targets.h>
 
 #if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
 
-#include <argon/cpp_util.h>
+#include <argon/cpp_util.hpp>
 
-#include <argon/osal/platforms/linux/linux.h>
+#include <argon/osal/platforms/linux/linux.hpp>
 
-#include <argon/memory/refcounted.h>
-#include <argon/geometry/geometry.h>
+#include <argon/memory/refcounted.hpp>
+#include <argon/geometry/geometry.hpp>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
-#include <argon/ui/ui.h>
+#include <argon/ui/ui.hpp>
 
 namespace Argon::OSAL::Linux
 {

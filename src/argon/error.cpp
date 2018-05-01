@@ -1,4 +1,4 @@
-#include <argon/error.h>
+#include <argon/error.hpp>
 
 Argon::Error::Error ( const String & Message ):
 	Message ( Message )
@@ -20,7 +20,7 @@ Argon::Error::~Error ()
 {
 }
 
-const Argon::String & Argon::Error::GetMessage ()
+const Argon::String & Argon::Error::get_message () const
 {
 	
 	return Message;

@@ -1,9 +1,9 @@
-#ifndef ARGON_OSAL_OSX_MAIN_H
-#define ARGON_OSAL_OSX_MAIN_H
+#ifndef ARGON_OSAL_LINUX_MAIN_HPP
+#define ARGON_OSAL_LINUX_MAIN_HPP
 
 #include <argon/osal/osal.h>
 
-#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
+#if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
 
 #include <argon/argon.h>
 
