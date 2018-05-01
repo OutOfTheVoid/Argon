@@ -19,7 +19,10 @@
 * backend to use on a given system (supposing it's
 * available )
 */
+
+// works on all systems
 #define ARGON_RENDERING_BACKEND_DUMMY 0
+// works on all currently defined systems
 #define ARGON_RENDERING_BACKEND_OPENGL 1
 
 // Select backends here:

@@ -124,6 +124,8 @@ namespace Argon::OSAL::MacOSX
 		void set_title ( const String & title );
 		void set_fullscreen ( bool fullscreen );
 		
+		
+		
 	private:
 		
 		MacWindow ( ObjcID ns_window_instance, ObjcID window_controller_instance );
@@ -138,7 +140,7 @@ namespace Argon::OSAL::MacOSX
 		
 	};
 	
-	class MacGLContextObj : public virtual Argon::Rendering::OpenGL::IGLContext
+	class MacGLContextObj : public RefCounted, public virtual Argon::Rendering::OpenGL::IGLContext
 	{
 	public:
 		

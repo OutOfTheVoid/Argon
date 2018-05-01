@@ -329,6 +329,7 @@ void Argon::OSAL::MacOSX::MacGLView::update ()
 }
 
 Argon::OSAL::MacOSX::MacGLContextObj::MacGLContextObj ( ObjcID ns_opengl_context_obj_instance ):
+	RefCounted ( 1 ),
 	ns_opengl_context_obj_instance ( ns_opengl_context_obj_instance )
 {
 };
@@ -336,7 +337,6 @@ Argon::OSAL::MacOSX::MacGLContextObj::MacGLContextObj ( ObjcID ns_opengl_context
 Argon::OSAL::MacOSX::MacGLContextObj::~MacGLContextObj ()
 {
 };
-
 
 void Argon::OSAL::MacOSX::MacGLContextObj::make_current () const
 {
