@@ -76,3 +76,19 @@ void Argon::UI::application_runloop ( ApplicationInitOptions & init_options )
 	#endif
 	
 }
+
+void Argon::UI::application_runloop_exit ()
+{
+	
+	#if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
+	
+	OSAL::MacOSX::MacApplication * application_instance = OSAL::MacOSX::MacApplication::get_shared_instance ();
+	
+	if ( application_instance != nullptr )
+		application_instance -> stop ();
+	
+	#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
+	#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
+	#endif
+	
+}

@@ -36,7 +36,8 @@ Argon::Rendering::FrameBuffer::~FrameBuffer ()
 	source_context -> make_current ();
 	source_context -> function_ptrs.delete_framebuffers ( 1, & gl_framebuffer_name );
 	
-	source_context -> Deref ();
+	if ( gl_framebuffer_name != 0 )
+		source_context -> Deref ();
 	
 };
 

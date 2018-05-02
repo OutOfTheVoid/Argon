@@ -432,3 +432,10 @@ extern void argon_osal_macosx_macapplication_run ()
 	[NSApp run];
 	
 }
+
+extern void argon_osal_macosx_macapplication_stop ()
+{
+	
+	[NSApp stop:nil];
+	
+}

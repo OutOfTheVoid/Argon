@@ -43,6 +43,7 @@ namespace Argon::OSAL::MacOSX
 		void set_activation_policy ( ActivationPolicy activation_policy );
 		void set_application_did_finish_launching_callback ( void ( * callback ) ( void * ), void * data );
 		void run () const;
+		void stop () const;
 		
 	private:
 		

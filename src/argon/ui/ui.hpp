@@ -56,6 +56,7 @@ namespace Argon::UI
 	
 	// enter the runloop
 	void application_runloop ( ApplicationInitOptions & init_options );
+	void application_runloop_exit ();
 	
 }
 

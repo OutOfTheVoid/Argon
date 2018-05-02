@@ -11,6 +11,7 @@ extern "C" ObjcID argon_osal_macosx_macapplication_getsharedinstance ( ObjcID * 
 extern "C" void argon_osal_macosx_macapplication_set_activation_policy ( unsigned int activation_policy );
 extern "C" void argon_osal_macosx_macapplication_set_did_finish_launching_callback ( void ( * callback ) ( void * ), void * data );
 extern "C" void argon_osal_macosx_macapplication_run ();
+extern "C" void argon_osal_macosx_macapplication_stop ();
 
 extern "C" ObjcID argon_osal_macosx_macmenu_create_0 ();
 extern "C" ObjcID argon_osal_macosx_macmenu_create_1 ( const char * title );
@@ -63,6 +64,13 @@ void Argon::OSAL::MacOSX::MacApplication::run () const
 	argon_osal_macosx_macapplication_run ();
 	
 };
+
+void Argon::OSAL::MacOSX::MacApplication::stop () const
+{
+	
+	argon_osal_macosx_macapplication_stop ();
+	
+}
 
 Argon::OSAL::MacOSX::MacApplication * Argon::OSAL::MacOSX::MacApplication::get_shared_instance ()
 {

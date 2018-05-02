@@ -3,6 +3,7 @@
 
 #include <argon/memory/refcounted.hpp>
 #include <argon/rendering/targets.hpp>
+#include <argon/events/eventdispatcher.hpp>
 
 namespace Argon::UI
 {
@@ -16,7 +17,7 @@ namespace Argon::Rendering
 	
 	class FrameBuffer;
 	
-	class Context : public Memory::RefCounted
+	class Context : public Memory::RefCounted, public Argon::Events::EventDispatcher
 	{
 	public:
 	

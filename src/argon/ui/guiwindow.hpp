@@ -11,8 +11,7 @@
 #include <argon/memory/refcounted.hpp>
 #include <argon/geometry/geometry.hpp>
 
-#include <argon/events/event.hpp>
-#include <argon/events/events.hpp>
+#include <argon/events/eventdispatcher.hpp>
 
 namespace Argon::UI
 {

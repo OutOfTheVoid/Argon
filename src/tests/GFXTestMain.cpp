@@ -33,6 +33,8 @@ void AppEntry ()
 	
 };
 
+int stop_count = 0;
+
 void WindowShouldClose ( Argon::Events::Event * event, void * data )
 {
 	
@@ -45,7 +47,10 @@ void WindowShouldClose ( Argon::Events::Event * event, void * data )
 	if ( window_should_close_event == nullptr )
 		return;
 	
-	//window_should_close_event -> cancel_close ();
+	if ( stop_count < 2 )
+		window_should_close_event -> cancel_close ();
+		
+	stop_count ++;
 	
 }
 
@@ -61,7 +66,7 @@ void WindowWillClose ( Argon::Events::Event * event, void * data )
 	if ( will_close_event == nullptr )
 		return;
 	
-	
+	Argon::UI::application_runloop_exit ();
 	
 }
 

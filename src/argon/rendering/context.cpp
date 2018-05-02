@@ -38,7 +38,7 @@ Argon::Rendering::Context::Context ( OpenGL::IGLContext * gl_context, OpenGL::GL
 	default_framebuffer ( nullptr )
 {
 	
-	default_framebuffer = new FrameBuffer ( 0, this );
+	default_framebuffer = new FrameBuffer ( this );
 	
 	gl_context -> Ref ();
 	memcpy ( & function_ptrs, function_pointers, sizeof ( OpenGL::GLFunctionPointers ) );
