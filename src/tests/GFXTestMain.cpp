@@ -33,15 +33,35 @@ void AppEntry ()
 	
 };
 
-void WindowShouldClose ( Argon::Events::Event * should_close_event, void * data )
+void WindowShouldClose ( Argon::Events::Event * event, void * data )
 {
 	
 	using Argon::UI::Events::WindowShouldCloseEvent;
 	
 	std :: cout << "Window should close!" << std :: endl;
 	
-	WindowShouldCloseEvent * window_should_close_event = dynamic_cast <WindowShouldCloseEvent *> ( should_close_event );
-	window_should_close_event -> cancel_close ();
+	WindowShouldCloseEvent * window_should_close_event = dynamic_cast <WindowShouldCloseEvent *> ( event );
+	
+	if ( window_should_close_event == nullptr )
+		return;
+	
+	//window_should_close_event -> cancel_close ();
+	
+}
+
+void WindowWillClose ( Argon::Events::Event * event, void * data )
+{
+	
+	using Argon::UI::Events::WindowEvent;
+	
+	std :: cout << "Window will close!" << std :: endl;
+	
+	WindowEvent * will_close_event = dynamic_cast <WindowEvent *> ( event );
+	
+	if ( will_close_event == nullptr )
+		return;
+	
+	
 	
 }
 
@@ -62,6 +82,7 @@ void ApplicationLaunched ( void * data )
 		( * main_window_ptr ) -> show ();
 		( * main_window_ptr ) -> set_title ( "Hello world!" );
 		( * main_window_ptr ) -> add_event_listener ( & Argon::UI::Events::WindowShouldCloseEvent::kevent_should_close, & WindowShouldClose, nullptr );
+		( * main_window_ptr ) -> add_event_listener ( & Argon::UI::Events::WindowEvent::kevent_will_close, & WindowWillClose, nullptr );
 		
 		Context * render_context = ( * main_window_ptr ) -> get_render_context ( true );
 		

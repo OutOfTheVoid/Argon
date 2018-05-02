@@ -33,6 +33,7 @@ Argon::UI::GUIWindow::GUIWindow ( Argon::OSAL::MacOSX::MacWindow * os_window ):
 {
 	
 	os_window -> set_should_close_handler ( should_close_event_dispatcher, reinterpret_cast<void *> ( this ) );
+	os_window -> set_will_close_handler ( will_close_event_dispatcher, reinterpret_cast<void *> ( this ) );
 	
 };
 
@@ -200,5 +201,18 @@ bool Argon::UI::GUIWindow::should_close_event_dispatcher ( void * data )
 	window_should_close_event -> Deref ();
 	
 	return ! cancel;
+	
+}
+
+void Argon::UI::GUIWindow::will_close_event_dispatcher ( void * data )
+{
+	
+	GUIWindow * window = reinterpret_cast<GUIWindow *> ( data );
+	
+	UI::Events::WindowEvent * window_will_close_event = new UI::Events::WindowEvent ( & UI::Events::WindowEvent::kevent_will_close, window );
+	
+	window -> dispatch_event ( window_will_close_event );
+	
+	window_will_close_event -> Deref ();
 	
 }

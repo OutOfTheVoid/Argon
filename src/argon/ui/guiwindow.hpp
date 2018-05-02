@@ -51,6 +51,7 @@ namespace Argon::UI
 	private:
 		
 		static bool should_close_event_dispatcher ( void * data );
+		static void will_close_event_dispatcher ( void * data );
 		
 		~GUIWindow ();
 		

@@ -205,6 +205,8 @@ Argon::OSAL::MacOSX::MacWindow::MacWindow ( ObjcID ns_window_instance, ObjcID ns
 	Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks callbacks;
 	callbacks.window_should_close_handler = & should_close_handler;
 	callbacks.window_should_close_handler_data = reinterpret_cast <void *> ( this );
+	callbacks.window_will_close_handler = & will_close_handler;
+	callbacks.window_will_close_handler_data = reinterpret_cast <void *> ( this );
 	
 	argon_osal_macosx_macwindow_delegate_set_callbacks ( ns_window_delegate_instance, & callbacks );
 	
@@ -280,6 +282,24 @@ bool Argon::OSAL::MacOSX::MacWindow::should_close_handler ( void * data )
 		return window -> should_close_event_handler ( window -> should_close_event_handler_data );
 	
 	return true;
+	
+}
+
+void Argon::OSAL::MacOSX::MacWindow::set_will_close_handler ( void ( * handler ) ( void * data ), void * handler_data )
+{
+	
+	will_close_event_handler = handler;
+	will_close_event_handler_data = handler_data;
+	
+}
+
+void Argon::OSAL::MacOSX::MacWindow::will_close_handler ( void * data )
+{
+	
+	MacWindow * window = reinterpret_cast<MacWindow *> ( data );
+	
+	if ( window -> will_close_event_handler )
+		return window -> will_close_event_handler ( window -> will_close_event_handler_data );
 	
 }
 

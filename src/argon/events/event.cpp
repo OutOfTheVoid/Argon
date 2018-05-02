@@ -347,7 +347,7 @@ void Argon::Events::EventDispatcher::dispatch_event ( Event * event )
 	
 	Vector<HandlerInfo> ** handler_info_list_ptr_ptr = handler_event_map.get_element_ref_temp ( event -> get_event_definition (), false );
 	
-	if ( * handler_info_list_ptr_ptr == nullptr )
+	if ( ( handler_info_list_ptr_ptr == nullptr ) || ( * handler_info_list_ptr_ptr == nullptr ) )
 		return;
 	
 	Vector<HandlerInfo> & handler_info_list = ( ** handler_info_list_ptr_ptr );

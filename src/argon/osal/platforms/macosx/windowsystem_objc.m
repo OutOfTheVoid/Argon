@@ -89,6 +89,14 @@
 	
 }
 
+-(void) windowWillClose:(NSWindow *)sender
+{
+	
+	if ( self -> callbacks.window_will_close_handler != nil )
+		self -> callbacks.window_will_close_handler ( self -> callbacks.window_will_close_handler_data );
+	
+}
+
 @end
 
 extern id argon_osal_macosx_macapplication_getsharedinstance ( id * delegate_instance )

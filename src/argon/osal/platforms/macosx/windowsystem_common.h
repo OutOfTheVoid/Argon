@@ -51,6 +51,9 @@ typedef struct
 	void * window_should_close_handler_data;
 	bool ( * window_should_close_handler ) ( void * );
 	
+	void * window_will_close_handler_data;
+	void ( * window_will_close_handler ) ( void * );
+	
 } Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks;
 
 #endif

@@ -118,6 +118,7 @@ namespace Argon::OSAL::MacOSX
 		void set_fullscreen ( bool fullscreen );
 		
 		void set_should_close_handler ( bool ( * handler ) ( void * data ), void * handler_data );
+		void set_will_close_handler ( void ( * handler ) ( void * data ), void * handler_data );
 		
 	private:
 		
@@ -135,6 +136,10 @@ namespace Argon::OSAL::MacOSX
 		static bool should_close_handler ( void * data );
 		bool ( * should_close_event_handler ) ( void * );
 		void * should_close_event_handler_data;
+		
+		static void will_close_handler ( void * data );
+		void ( * will_close_event_handler ) ( void * data );
+		void * will_close_event_handler_data;
 		
 	};
 	
