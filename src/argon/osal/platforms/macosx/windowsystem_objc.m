@@ -58,6 +58,39 @@
 
 @end
 
+@interface Argon_OSAL_MacOSX_NSWindowDelegateExt : NSObject <NSWindowDelegate>
+{
+
+	@public Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks callbacks;
+	
+}
+@end
+
+@implementation Argon_OSAL_MacOSX_NSWindowDelegateExt
+
+-(instancetype) init
+{
+	
+	[super init];
+	
+	memset ( (void *) & ( self -> callbacks ), 0, sizeof ( Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks ) );
+	
+	return self;
+	
+}
+
+-(BOOL) windowShouldClose:(NSWindow *)sender
+{
+	
+	if ( self -> callbacks.window_should_close_handler != nil )
+		return self -> callbacks.window_should_close_handler ( self -> callbacks.window_should_close_handler_data ) ? YES : NO;
+	
+	return YES;
+	
+}
+
+@end
+
 extern id argon_osal_macosx_macapplication_getsharedinstance ( id * delegate_instance )
 {
 	
@@ -134,7 +167,9 @@ extern id argon_osal_macosx_macmenu_create_1 ( const char * title )
 	
 }
 
-extern id argon_osal_macosx_macwindow_create_1 ( Argon_OSAL_MacOSX_WindowSystem_Rect content_rect, uint32_t style_flags, id * window_controller_instance )
+#include <string.h>
+
+extern id argon_osal_macosx_macwindow_create_1 ( Argon_OSAL_MacOSX_WindowSystem_Rect content_rect, uint32_t style_flags, id * window_controller_instance, id * window_delegate_instance )
 {
 	
 	NSRect content_frame = NSMakeRect ( content_rect.x, content_rect.y, content_rect.width, content_rect.height );
@@ -169,15 +204,36 @@ extern id argon_osal_macosx_macwindow_create_1 ( Argon_OSAL_MacOSX_WindowSystem_
 		
 	}
 	
+	* window_delegate_instance = [[Argon_OSAL_MacOSX_NSWindowDelegateExt alloc] init];
+	
+	if ( * window_delegate_instance == nil )
+	{
+		
+		[ns_window_instance release];
+		[* window_controller_instance release];
+		* window_controller_instance = nil;
+		return nil;
+		
+	}
+	
+	[ns_window_instance setDelegate:* window_delegate_instance];
+	
 	return ns_window_instance;
 	
 };
+
+extern void argon_osal_macosx_macwindow_delegate_set_callbacks ( id ns_window_delegate_instance, const Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks * callbacks )
+{
+	
+	memcpy ( & ( ( (Argon_OSAL_MacOSX_NSWindowDelegateExt *) ns_window_delegate_instance ) -> callbacks ), callbacks, sizeof ( Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks ) );
+	
+}
 
 extern void argon_osal_macosx_macwindow_set_view ( id ns_window_instance, id view_instance )
 {
 	
 	[(NSWindow *)ns_window_instance setContentView:view_instance];
-	[(NSWindow *)ns_window_instance setDelegate:view_instance];
+	//[(NSWindow *)ns_window_instance setDelegate:view_instance];
 	
 };
 

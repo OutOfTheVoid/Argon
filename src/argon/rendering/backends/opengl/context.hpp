@@ -1,8 +1,8 @@
 #ifndef ARGON_RENDERING_BACKENDS_OPENGL_CONTEXT_HPP
 #define ARGON_RENDERING_BACKENDS_OPENGL_CONTEXT_HPP
 
-#include <argon/rendering/backends/opengl/opengl.hpp>
 #include <argon/memory/refcounted.hpp>
+#include <argon/string.hpp>
 
 namespace Argon::Rendering::OpenGL
 {

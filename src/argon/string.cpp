@@ -328,6 +328,26 @@ Argon::String::String ( const std::u16string & std_string ):
 	
 };
 
+bool Argon::String::operator== ( const String & rhs ) const
+{
+	
+	uint32_t count = chars.get_count ();
+	
+	if ( rhs.get_count () != count )
+		return false;
+	
+	for ( size_t i = 0; i < count; i ++ )
+	{
+		
+		if ( chars [ i ] != rhs.chars [ i ] )
+			return false;
+		
+	}
+	
+	return true;
+	
+}
+
 Argon::String::String ( const std::u32string & std_string ):
 	chars ( std_string.length () )
 {

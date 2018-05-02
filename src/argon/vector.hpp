@@ -141,19 +141,36 @@ namespace Argon
 		};
 		
 		// raw element accessor
-		const T & operator[] ( int32_t index ) const
+		const T & operator[] ( size_t index ) const
 		{
 			
 			return elements [ index ];
 			
 		};
 		
-		T & operator[] ( int32_t index )
+		T & operator[] ( size_t index )
 		{
 			
 			return elements [ index ];
 			
 		};
+		
+		void add_at ( T value, size_t index )
+		{
+			
+			if ( count >= capacity )
+				DoubleCapacity ();
+			
+			if ( index >= count )
+				index = count - 1;
+			
+			for ( size_t i = count; i > index; i -- )
+				elements [ i ] = elements [ i - 1 ];
+			
+			elements [ index ] = value;
+			count ++;
+			
+		}
 		
 		// push a value onto the vector, allocating more room if necessary
 		void push ( T value )

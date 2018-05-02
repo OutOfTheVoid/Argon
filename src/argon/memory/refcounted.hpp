@@ -9,8 +9,8 @@ namespace Argon::Memory
 	class IRefCounted
 	{
 	public:
-		virtual void Ref () = 0;
-		virtual void Deref () = 0;
+		virtual void Ref () const = 0;
+		virtual void Deref () const = 0;
 		
 	};
 	
@@ -49,17 +49,17 @@ namespace Argon::Memory
 			
 		};
 		
-		inline void Ref ()
+		inline void Ref () const
 		{
 			
-			ref_count ++;
+			const_cast<std::atomic_int &>( ref_count ) ++;
 			
 		};
 		
-		inline void Deref ()
+		inline void Deref () const
 		{
 			
-			int previous = ref_count.fetch_sub ( 1 );
+			int previous = const_cast<std::atomic_int &>( ref_count ).fetch_sub ( 1 );
 			
 			if ( previous == 1 )
 			{

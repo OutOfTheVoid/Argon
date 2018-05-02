@@ -103,6 +103,8 @@ namespace Argon
 		const Vector<char32_t> & get_chars () const;
 		Vector<char32_t> & get_chars ();
 		
+		bool operator== ( const String & rhs ) const;
+		
 		// get the number of charachters
 		size_t get_count () const;
 		

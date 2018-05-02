@@ -45,5 +45,13 @@ typedef struct
 	
 } Argon_OSAL_MacOSX_WindowSystem_Rect;
 
+typedef struct
+{
+	
+	void * window_should_close_handler_data;
+	bool ( * window_should_close_handler ) ( void * );
+	
+} Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks;
+
 #endif
 #endif

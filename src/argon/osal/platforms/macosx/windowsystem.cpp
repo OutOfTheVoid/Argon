@@ -5,6 +5,8 @@
 #include <argon/osal/platforms/macosx/windowsystem.hpp>
 #include <argon/osal/platforms/macosx/windowsystem_common.h>
 
+extern "C" void argon_osal_macosx_windowsystem_release ( ObjcID object );
+
 extern "C" ObjcID argon_osal_macosx_macapplication_getsharedinstance ( ObjcID * delegate_instance );
 extern "C" void argon_osal_macosx_macapplication_set_activation_policy ( unsigned int activation_policy );
 extern "C" void argon_osal_macosx_macapplication_set_did_finish_launching_callback ( void ( * callback ) ( void * ), void * data );
@@ -13,8 +15,7 @@ extern "C" void argon_osal_macosx_macapplication_run ();
 extern "C" ObjcID argon_osal_macosx_macmenu_create_0 ();
 extern "C" ObjcID argon_osal_macosx_macmenu_create_1 ( const char * title );
 
-extern "C" ObjcID argon_osal_macosx_macwindow_create_1 ( Argon_OSAL_MacOSX_WindowSystem_Rect content_rect, uint32_t style_flags, ObjcID * window_controller_instance );
-extern "C" void argon_osal_macosx_windowsystem_release ( ObjcID object );
+extern "C" ObjcID argon_osal_macosx_macwindow_create_1 ( Argon_OSAL_MacOSX_WindowSystem_Rect content_rect, uint32_t style_flags, ObjcID * window_controller_instance, ObjcID * window_delegate_instance );
 extern "C" void argon_osal_macosx_macwindow_order_front ( ObjcID ns_window_instance, bool regardless_of_application_focus );
 extern "C" void argon_osal_macosx_macwindow_make_key_and_order_front ( ObjcID ns_window_instance );
 extern "C" void argon_osal_macosx_macwindow_set_view ( ObjcID ns_window_instance, ObjcID view_instance );
@@ -24,6 +25,8 @@ extern "C" void argon_osal_macosx_macwindow_set_frame ( ObjcID ns_window_instanc
 extern "C" void argon_osal_macosx_macwindow_set_window_level_plus ( ObjcID ns_window_instance, uint32_t level, uint32_t addition );
 extern "C" void argon_osal_macosx_macwindow_set_frame_to_screen ( ObjcID ns_window_instance );
 extern "C" void argon_osal_macosx_macwindow_set_hides_on_deactivate ( id ns_window_instance, bool hides_on_deactivate );
+
+extern "C" void argon_osal_macosx_macwindow_delegate_set_callbacks ( ObjcID ns_window_delegate_instance, const Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks * callbacks );
 
 extern "C" ObjcID argon_osal_macosx_openglview_create ( unsigned int version, Argon_OSAL_MacOSX_WindowSystem_Rect frame_rect, ObjcID * ns_opengl_context_obj_instance );
 extern "C" void argon_osal_macosx_openglview_set_draw_callback ( ObjcID ns_opengl_view_instance, void ( * callback )( void * ), void * callback_data );
@@ -119,13 +122,18 @@ Argon::OSAL::MacOSX::MacWindow * Argon::OSAL::MacOSX::MacWindow::create ( const 
 	objc_window_rect.width = window_rect.size.x;
 	objc_window_rect.height = window_rect.size.y;
 	
+	Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks callbacks;
+	callbacks.window_should_close_handler = nullptr;
+	callbacks.window_should_close_handler_data = nullptr;
+	
 	ObjcID ns_window_controller_instance = nullptr;
-	ObjcID ns_window_instance = argon_osal_macosx_macwindow_create_1 ( objc_window_rect, style_mask, & ns_window_controller_instance );
+	ObjcID ns_window_delegate_instance = nullptr;
+	ObjcID ns_window_instance = argon_osal_macosx_macwindow_create_1 ( objc_window_rect, style_mask, & ns_window_controller_instance, & ns_window_delegate_instance );
 	
 	if ( ns_window_instance == nullptr )
 		return nullptr;
 		
-	return new MacWindow ( ns_window_instance, ns_window_controller_instance );
+	return new MacWindow ( ns_window_instance, ns_window_controller_instance, ns_window_delegate_instance );
 	
 };
 
@@ -156,7 +164,7 @@ void Argon::OSAL::MacOSX::MacWindow::set_view ( IMacWindowView * view_virt )
 		
 	}
 	
-	switch ( view -> get_view_type () )
+	switch ( view_virt -> get_view_type () )
 	{
 		
 		case IMacWindowView::ktype_gl:
@@ -164,10 +172,11 @@ void Argon::OSAL::MacOSX::MacWindow::set_view ( IMacWindowView * view_virt )
 			
 			this -> view = view_virt;
 			
-			MacGLView * gl_view = static_cast<MacGLView *> ( view_virt );
+			MacGLView * gl_view = dynamic_cast<MacGLView *> ( view_virt );
+			
 			gl_view -> Ref ();
 			
-			view_instance = ( gl_view ) -> ns_opengl_view_instance;
+			view_instance = gl_view -> ns_opengl_view_instance;
 			
 		}
 		break;
@@ -181,14 +190,24 @@ void Argon::OSAL::MacOSX::MacWindow::set_view ( IMacWindowView * view_virt )
 	
 };
 
-Argon::OSAL::MacOSX::MacWindow::MacWindow ( ObjcID ns_window_instance, ObjcID ns_window_controller_instance ):
+Argon::OSAL::MacOSX::MacWindow::MacWindow ( ObjcID ns_window_instance, ObjcID ns_window_controller_instance, ObjcID ns_window_delegate_instnace ):
 	RefCounted ( 1 ),
 	ns_window_instance ( ns_window_instance ),
 	ns_window_controller_instance ( ns_window_controller_instance ),
+	ns_window_delegate_instance ( ns_window_delegate_instnace ),
 	non_fullscreen_rect (),
 	fullscreen ( false ),
-	view ( nullptr )
+	view ( nullptr ),
+	should_close_event_handler ( nullptr ),
+	should_close_event_handler_data ( nullptr )
 {
+	
+	Argon_OSAL_MacOSX_WindowSystem_WindowDelegate_Event_Callbacks callbacks;
+	callbacks.window_should_close_handler = & should_close_handler;
+	callbacks.window_should_close_handler_data = reinterpret_cast <void *> ( this );
+	
+	argon_osal_macosx_macwindow_delegate_set_callbacks ( ns_window_delegate_instance, & callbacks );
+	
 };
 
 Argon::OSAL::MacOSX::MacWindow::~MacWindow ()
@@ -204,6 +223,7 @@ Argon::OSAL::MacOSX::MacWindow::~MacWindow ()
 	
 	argon_osal_macosx_windowsystem_release ( ns_window_controller_instance );
 	argon_osal_macosx_windowsystem_release ( ns_window_instance );
+	argon_osal_macosx_windowsystem_release ( ns_window_delegate_instance );
 	
 };
 
@@ -240,6 +260,26 @@ void Argon::OSAL::MacOSX::MacWindow::set_fullscreen ( bool fullscreen )
 		}
 		
 	}
+	
+}
+
+void Argon::OSAL::MacOSX::MacWindow::set_should_close_handler ( bool ( * handler ) ( void * data ), void * handler_data )
+{
+	
+	should_close_event_handler = handler;
+	should_close_event_handler_data = handler_data;
+	
+}
+
+bool Argon::OSAL::MacOSX::MacWindow::should_close_handler ( void * data )
+{
+	
+	MacWindow * window = reinterpret_cast<MacWindow *> ( data );
+	
+	if ( window -> should_close_event_handler )
+		return window -> should_close_event_handler ( window -> should_close_event_handler_data );
+	
+	return true;
 	
 }
 
@@ -353,21 +393,19 @@ void Argon::OSAL::MacOSX::MacGLContextObj::flush_back_buffer () const
 }
 
 #include <dlfcn.h>
+#include <iostream>
 
 void * Argon::OSAL::MacOSX::MacGLContextObj::void_gl_get_proc_address ( const String & gl_symbol ) const
 {
 	
-	String gl_symbol_prefixed ( "_" );
-	gl_symbol_prefixed.append ( gl_symbol );
-	
-	std::string std_string_gl_symbol = gl_symbol_prefixed;
+	std::string std_string_gl_symbol = gl_symbol;
 	
 	static void * opengl_lib_image = nullptr;
 	
 	if ( opengl_lib_image == nullptr )
 	{
 		
-		opengl_lib_image = dlopen ( "/System/Library/Frameworks/Opengl.framework/Versions/Current/OpenGL", RTLD_LAZY );
+		opengl_lib_image = dlopen ( "/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL", RTLD_LAZY );
 	
 		if ( opengl_lib_image == nullptr )
 			return nullptr;

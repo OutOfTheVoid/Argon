@@ -1,18 +1,25 @@
 #ifndef ARGON_UI_GUIWINDOW_HPP
 #define ARGON_UI_GUIWINDOW_HPP
 
-#include <argon/osal/osal.hpp>
+#include <stdint.h>
+
+#include <argon/osal/targets.h>
 #include <argon/osal/windowsystem.hpp>
+
+#include <argon/rendering/context.hpp>
 
 #include <argon/memory/refcounted.hpp>
 #include <argon/geometry/geometry.hpp>
+
+#include <argon/events/event.hpp>
+#include <argon/events/events.hpp>
 
 namespace Argon::UI
 {
 	
 	using Geometry::Rect;
 	
-	class GUIWindow : public Argon::Memory::RefCounted
+	class GUIWindow : public Memory::RefCounted, public Argon::Events::EventDispatcher
 	{
 	public:
 		
@@ -39,7 +46,11 @@ namespace Argon::UI
 		void set_title ( const String & title );
 		void set_fullscreen ( bool fullscreen );
 		
+		Rendering::Context * get_render_context ( bool temporary );
+		
 	private:
+		
+		static bool should_close_event_dispatcher ( void * data );
 		
 		~GUIWindow ();
 		
@@ -48,6 +59,12 @@ namespace Argon::UI
 		GUIWindow ( OSAL::MacOSX::MacWindow * os_window );
 		
 		OSAL::MacOSX::MacWindow * os_window;
+		
+		#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+		OSAL::MacOSX::MacGLView * gl_view;
+		#endif
+		
+		Rendering::Context * rendering_context;
 		
 		#endif
 		

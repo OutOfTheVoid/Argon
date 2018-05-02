@@ -3,9 +3,6 @@
 
 namespace Argon::Rendering
 {
-	
-	
-	
 };
 
 #endif

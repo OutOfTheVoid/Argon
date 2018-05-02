@@ -85,14 +85,7 @@ namespace Argon::OSAL::MacOSX
 			
 		};
 		
-		virtual ~IMacWindowView () {};
-		
-		virtual Type get_view_type () const
-		{
-			
-			return ktype_null;
-			
-		};
+		virtual Type get_view_type () const = 0;
 		
 	private:
 	};
@@ -124,19 +117,24 @@ namespace Argon::OSAL::MacOSX
 		void set_title ( const String & title );
 		void set_fullscreen ( bool fullscreen );
 		
-		
+		void set_should_close_handler ( bool ( * handler ) ( void * data ), void * handler_data );
 		
 	private:
 		
-		MacWindow ( ObjcID ns_window_instance, ObjcID window_controller_instance );
+		MacWindow ( ObjcID ns_window_instance, ObjcID window_controller_instance, ObjcID ns_window_delegate_instance );
 		
 		ObjcID ns_window_instance;
 		ObjcID ns_window_controller_instance;
+		ObjcID ns_window_delegate_instance;
 		
 		Argon_OSAL_MacOSX_WindowSystem_Rect non_fullscreen_rect;
 		bool fullscreen;
 		
 		IMacWindowView * view;
+		
+		static bool should_close_handler ( void * data );
+		bool ( * should_close_event_handler ) ( void * );
+		void * should_close_event_handler_data;
 		
 	};
 	
@@ -169,7 +167,7 @@ namespace Argon::OSAL::MacOSX
 		
 	};
 	
-	class MacGLView : public RefCounted, public IMacWindowView
+	class MacGLView : public virtual IMacWindowView, public RefCounted
 	{
 	public:
 		
@@ -214,26 +212,24 @@ namespace Argon::OSAL::MacOSX
 	class MacMetalDevice
 	{
 		
-		
-		
 	private:
 		
 		ObjcID metal_device_instance;
 			
 	};
-	
+	/*
 	class MacMetalView : public IMacWindowView, RefCounted
 	{
 	public:
 		
 		static MacMetalView * create (  );
 		
-		
 	private:
 		
 		MacMetalDevice * metal_device;
 		
 	};
+	*/
 	
 };
 
