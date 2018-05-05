@@ -84,7 +84,9 @@ Argon::Rendering::FrameBuffer * Argon::Rendering::Context::get_default_framebuff
 
 #elif (ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_DUMMY)
 
-Argon::Rendering::Context::Context ()
+Argon::Rendering::Context::Context ():
+	RefCounted ( 1 ),
+	default_framebuffer ( nullptr )
 {
 }
 
@@ -92,11 +94,21 @@ Argon::Rendering::Context::~Context ()
 {
 }
 
-void Argon::Rendering::Context::make_current ()
+Argon::Rendering::FrameBuffer * Argon::Rendering::Context::get_default_framebuffer ()
+{
+	
+	if ( default_framebuffer == nullptr )
+		default_framebuffer = new FrameBuffer ( this );
+	
+	return default_framebuffer;
+	
+}
+
+void Argon::Rendering::Context::make_current () const
 {
 }
 
-void Argon::Rendering::Context::flush_back_buffer ()
+void Argon::Rendering::Context::flush_back_buffer () const
 {
 }
 

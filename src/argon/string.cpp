@@ -1,7 +1,7 @@
 #include <argon/string.hpp>
 
 Argon::String::String ():
-	chars ()
+	chars ( Vector<char32_t>::NoInit )
 {
 };
 
@@ -392,13 +392,13 @@ void Argon::String::append ( const String & value )
 	
 }
 
-Argon::String Argon::String::sub_string ( size_t index, size_t count ) const
+Argon::String && Argon::String::sub_string ( size_t index, size_t count ) const
 {
 	
 	size_t src_count = chars.get_count ();
 	
 	if ( index >= src_count )
-		return String ();
+		return std::move ( String () );
 		
 	size_t remaining_length = src_count - index;
 	
@@ -410,7 +410,7 @@ Argon::String Argon::String::sub_string ( size_t index, size_t count ) const
 	for ( size_t i = 0; i < count; i ++ )
 		out.chars [ i ] = chars [ i + index ];
 	
-	return out;
+	return std::move ( out );
 	
 }
 
@@ -459,6 +459,84 @@ Argon::String:: operator std::string () const
 	}
 	
 	return out;
+	
+};
+
+Argon::Array<Argon::String> && Argon::String::split ( const String & delimiter, size_t start, size_t length, size_t max_count )
+{
+	
+	if ( start >= chars.get_count () )
+		return std::move ( Array<String> ( Array<String>::NoInit ) );
+	
+	if ( ( start + length >= chars.get_count () ) || ( length == 0 ) )
+		length = chars.get_count () - start;
+	
+	size_t end = start + length;
+	
+	if ( delimiter.chars.get_count () == 0 )
+	{
+		
+		Array<String> out_array ( 1 );
+		out_array [ 1 ] = std::move ( String ( * this ) );
+		
+		return std::move ( out_array );
+		
+	}
+	
+	Argon::Vector<String> sub_strings;
+	
+	size_t run_begin = 0;
+	size_t run_count = 0;
+	
+	while ( run_begin + run_count < end )
+	{
+		
+		if ( delimiter.chars [ 0 ] == chars [ run_begin + run_count ] )
+		{
+			
+			if ( chars.get_count () <= ( run_begin + run_count + delimiter.chars.get_count () ) )
+				break;
+			
+			bool not_delimited = false;
+			
+			for ( size_t t = 0; t < delimiter.chars.get_count (); t ++ )
+			{
+				
+				if ( delimiter.chars [ t ] != chars [ run_begin + run_count + t ] )
+				{
+					
+					not_delimited = true;
+					
+					break;
+					
+				}
+				
+			}
+			
+			if ( ! not_delimited && run_count != 0 )
+			{
+				
+				sub_strings.push ( Vector<String>::Move, sub_string ( run_begin, run_count - 1 ) );
+				
+				if ( ( max_count == 0 ) || ( sub_strings.get_count () == max_count ) )
+					return sub_strings.into_array ();
+				
+				run_begin += run_count + delimiter.chars.get_count ();
+				
+				continue;
+				
+			}
+			
+		}
+		
+		run_count ++;
+		
+	}
+	
+	if ( run_count != 0 )
+		sub_strings.push ( Argon::Vector<String>::Move, sub_string ( run_begin, run_count ) );
+	
+	return sub_strings.into_array ();
 	
 };
 

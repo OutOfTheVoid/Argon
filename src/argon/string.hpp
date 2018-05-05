@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include <argon/vector.hpp>
+#include <argon/array.hpp>
 #include <stdint.h>
 
 /*
@@ -112,7 +113,10 @@ namespace Argon
 		void append ( const String & value );
 		
 		// get a sub-string of the string
-		String sub_string ( size_t index, size_t count ) const;
+		String && sub_string ( size_t index, size_t count ) const;
+		
+		// split the string by a seperator
+		Array<String> && split ( const String & delimiter, size_t start = 0, size_t length = 0, size_t max_count = 0 );
 		
 	private:
 		

@@ -58,6 +58,14 @@ namespace Argon::Rendering
 		GLuint gl_framebuffer_name;
 		Context * source_context;
 		
+		#elif (ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_DUMMY)
+		
+		FrameBuffer ( Context * owner_of_default_framebuffer );
+		
+		static void default_framebuffer_delete ( void * context_instance );
+		
+		Context * source_context;
+		
 		#endif
 		
 	};

@@ -103,7 +103,9 @@ namespace Argon::Events
 				if ( alloc )
 				{
 					
-					mappings.push ( { default_value, event_definition } );
+					MappingElement mapping { default_value, event_definition };
+					
+					mappings.push ( mapping );
 					event_definition -> Ref ();
 					
 					return & mappings [ mapping_count ].element;

@@ -58,6 +58,9 @@ namespace Argon
 		inline void operator= ( Array<T> && moved )
 		{
 			
+			elements = nullptr;
+			length = 0;
+			
 			std::swap ( elements, moved.elements );
 			std::swap ( length, moved.length );
 			
@@ -85,11 +88,22 @@ namespace Argon
 			
 		};
 		
+		static inline Array<T> && create_from_c_array_owned ( T * array, size_t length )
+		{
+			
+			Array out_array ( NoInit );
+			out_array.elements = array;
+			out_array.length = length;
+			
+			return std::move ( out_array );
+			
+		}
+		
 		// destructor
 		~Array ()
 		{
 			
-			delete elements;
+			delete[] elements;
 			
 		}
 		

@@ -54,9 +54,9 @@ namespace Argon::Rendering
 		#elif(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_DUMMY)
 		
 		Context ();
-		void make_current () const;
-		void flush_back_buffer () const;
-		FrameBuffer * get_default_framebuffer ();
+		
+		friend class FrameBuffer;
+		FrameBuffer * default_framebuffer;
 		
 		#endif
 		

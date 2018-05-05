@@ -16,7 +16,6 @@
 	#else
 		#define ARGON_PLATFORM_OS_BITWIDTH 32
 	#endif
-	#include <argon/osal/platforms/windows/windows.h>
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
@@ -34,7 +33,6 @@
 
 #if defined(__linux__)
 	#define ARGON_PLATFORM_OS ARGON_PLATFORM_OS_VALUE_LINUX
-	#include <argon/osal/platforms/linux/linux.h>
 #endif
 
 #endif

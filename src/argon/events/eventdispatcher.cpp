@@ -19,10 +19,12 @@ void Argon::Events::EventDispatcher::add_event_listener ( const EventDefinition 
 		
 	Vector<HandlerInfo> & handler_info_list = ( ** handler_info_list_ptr_ptr );
 		
+	HandlerInfo new_handler { event_handler, event_handler_data };
+	
 	if ( index == kevent_index_end )
-		handler_info_list.push ( { event_handler, event_handler_data } );
+		handler_info_list.push ( new_handler );
 	else
-		handler_info_list.add_at ( { event_handler, event_handler_data }, index );
+		handler_info_list.add_at ( new_handler, index );
 	
 };
 

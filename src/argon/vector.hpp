@@ -11,6 +11,8 @@
 *
 */
 
+#include <argon/array.hpp>
+
 namespace Argon
 {
 	
@@ -22,6 +24,11 @@ namespace Argon
 		enum NO_INIT
 		{
 			NoInit
+		};
+		
+		enum MOVE
+		{
+			Move
 		};
 		
 		// empty/minimal init constructor - mostly useful for swapping.
@@ -61,7 +68,28 @@ namespace Argon
 				for ( size_t i = 0; i < count; i ++ )
 					this -> elements [ i ] = elements [ i ];
 				
+				this -> count = capacity;
+				
 			}
+			
+		};
+		
+		Vector ( MOVE move, T * elements, size_t count ):
+			capacity ( count ),
+			count ( 0 ),
+			elements ( new T [ capacity ] )
+		{
+			
+			if ( elements != nullptr )
+			{
+				
+				for ( size_t i = 0; i < count; i ++ )
+					this -> elements [ i ] = std::move ( elements [ i ] );
+				
+				this -> count = count;
+				
+			}
+			
 			
 		};
 		
@@ -184,6 +212,17 @@ namespace Argon
 			
 		};
 		
+		void push ( MOVE move, T && value )
+		{
+			
+			if ( count >= capacity )
+				DoubleCapacity ();
+			
+			elements [ count ] = std::move ( value );
+			count ++;
+			
+		};
+		
 		// pop an element off the vector
 		T pop ()
 		{
@@ -252,6 +291,17 @@ namespace Argon
 			
 		}
 		
+		Array<T> && into_array ()
+		{
+			
+			Array<T> out_array = Array<T>::create_from_c_array_owned ( elements, count );
+			elements = nullptr;
+			count = 0;
+			capacity = 0;
+			return std::move ( out_array );
+			
+		}
+		
 	private:
 		
 		void DoubleCapacity ()
@@ -260,7 +310,7 @@ namespace Argon
 			T * new_elements = new T [ capacity * 2 ];
 			
 			for ( size_t i = 0; i < capacity; i ++ )
-				new_elements [ i ] = elements [ i ];
+				new_elements [ i ] = std::move ( elements [ i ] );
 			
 			delete elements;
 			

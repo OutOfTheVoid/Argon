@@ -126,15 +126,30 @@ void Argon::Rendering::FrameBuffer::clear ( const ClearOptions & clear_options )
 
 #elif(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_DUMMY)
 
-Argon::Rendering::FrameBuffer::FrameBuffer ()
+Argon::Rendering::FrameBuffer::FrameBuffer ( Context * owner_of_default_framebuffer ):
+	RefCounted ( 1, & default_framebuffer_delete, reinterpret_cast<void *> ( this ) ),
+	source_context ( owner_of_default_framebuffer )
 {
-};
+}
+
+void Argon::Rendering::FrameBuffer::default_framebuffer_delete ( void * context_instance )
+{
+	
+	Rendering::Context * context = reinterpret_cast <Context *> ( context_instance );
+	
+	context -> default_framebuffer = nullptr;
+	
+}
 
 Argon::Rendering::FrameBuffer::~FrameBuffer ()
 {
 };
 
-void Argon::Rendering::FrameBuffer::bind ()
+void Argon::Rendering::FrameBuffer::bind ( BindTarget target )
+{
+};
+
+void Argon::Rendering::FrameBuffer::clear ( const ClearOptions & clear_options )
 {
 };
 

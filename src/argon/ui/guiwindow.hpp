@@ -74,6 +74,8 @@ namespace Argon::UI
 		
 		OSAL::Linux::LinuxWindow * os_window;
 		
+		Rendering::Context * rendering_context;
+		
 		#elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 
 		GUIWindow ( OSAL::Windows::WinWindow * os_window );

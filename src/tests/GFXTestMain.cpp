@@ -91,7 +91,7 @@ void ApplicationLaunched ( void * data )
 		
 		Context * render_context = ( * main_window_ptr ) -> get_render_context ( true );
 		
-		if ( render_context != nullptr )
+		/*if ( render_context != nullptr )
 		{
 			
 			render_context -> make_current ();
@@ -111,7 +111,7 @@ void ApplicationLaunched ( void * data )
 			
 			framebuffer -> Deref ();
 			
-		}
+		}*/
 		
 	}
 	

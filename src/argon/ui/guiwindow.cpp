@@ -1,6 +1,7 @@
 #include <argon/ui/guiwindow.hpp>
 #include <argon/rendering/targets.hpp>
 #include <argon/ui/events/uievents.hpp>
+#include <argon/rendering/context.hpp>
 
 #if (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 
@@ -85,10 +86,15 @@ Argon::Rendering::Context * Argon::UI::GUIWindow::get_render_context ( bool temp
 
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_LINUX)
 
+#if (ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+#include <argon/rendering/backends/opengl/opengl.hpp>
+#endif
+
 Argon::UI::GUIWindow::GUIWindow ( OSAL::Linux::LinuxWindow * os_window ):
 	RefCounted ( 1 ),
 	EventDispatcher (),
-	os_window ( os_window )
+	os_window ( os_window ),
+	rendering_context ( nullptr )
 {
 };
 
@@ -96,8 +102,12 @@ Argon::UI::GUIWindow * Argon::UI::GUIWindow::create ( const Rect & content_frame
 {
 	
 	using OSAL::Linux::LinuxWindow;
+	using OSAL::Linux::LinuxGLContext;
 	
-	LinuxWindow * os_window = LinuxWindow::create ( content_frame, 0 );
+	
+	#if (ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+	LinuxWindow * os_window = LinuxWindow::create_gl ( content_frame, 0, LinuxGLContext::kversion_3_2 );
+	#endif // TODO: Implement this for the dummy rendering backend...
 	
 	if ( os_window == nullptr )
 		return nullptr;
@@ -126,6 +136,33 @@ void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
 	// TODO: Implement
 	
 };
+
+Argon::Rendering::Context * Argon::UI::GUIWindow::get_render_context ( bool temporary )
+{
+	
+	if ( rendering_context != nullptr )
+		return rendering_context;
+		
+	#if (ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+	
+	using OSAL::Linux::LinuxGLContext;
+	
+	LinuxGLContext * linxu_gl_context = os_window -> get_opengl_context ();
+	
+	if ( linxu_gl_context == nullptr)
+		return nullptr;
+	
+	rendering_context = Argon::Rendering::Context::create_from_gl_context ( linxu_gl_context );
+	return rendering_context;
+	
+	#else
+	
+	rendering_context = new Argon::Rendering::Context ();
+	return rendering_context;
+	
+	#endif
+	
+}
 
 #elif (ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_WINDOWS)
 
@@ -183,8 +220,10 @@ Argon::UI::GUIWindow::~GUIWindow ()
 		rendering_context -> Deref ();
 	
 	#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+	#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 	if ( gl_view != nullptr )
 		gl_view -> Deref ();
+	#endif
 	#endif
 	
 }
