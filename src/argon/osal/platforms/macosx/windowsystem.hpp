@@ -148,6 +148,8 @@ namespace Argon::OSAL::MacOSX
 	{
 	public:
 		
+		static MacGLContextObj * create_share_context ( MacGLContextObj & share );
+		
 		MacGLContextObj ( ObjcID ns_opengl_context_obj_instance );
 		
 		void make_current () const;

@@ -62,6 +62,9 @@ namespace Argon::UI
 		
 		#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
 		OSAL::MacOSX::MacGLView * gl_view;
+		OSAL::MacOSX::MacGLContextObj * drawing_gl_context;
+		
+		static void backing_gl_view_render ( OSAL::MacOSX::MacGLView * gl_view, void * data );
 		#endif
 		
 		Rendering::Context * rendering_context;

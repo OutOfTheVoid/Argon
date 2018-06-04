@@ -29,7 +29,9 @@ Argon::UI::GUIWindow::GUIWindow ( Argon::OSAL::MacOSX::MacWindow * os_window ):
 	os_window ( os_window ),
 	rendering_context ( nullptr )
 #if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
-	,gl_view ( nullptr )
+	,
+	gl_view ( nullptr ),
+	drawing_gl_context ( nullptr )
 #endif
 {
 	
@@ -59,6 +61,17 @@ void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
 		
 };
 
+#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+void Argon::UI::GUIWindow::backing_gl_view_render ( OSAL::MacOSX::MacGLView * gl_view, void * data )
+{
+	
+	GUIWindow * this_window = reinterpret_cast <GUIWindow *> ( data );
+	
+	
+	
+}
+#endif
+
 Argon::Rendering::Context * Argon::UI::GUIWindow::get_render_context ( bool temporary )
 {
 	
@@ -69,7 +82,17 @@ Argon::Rendering::Context * Argon::UI::GUIWindow::get_render_context ( bool temp
 	if ( gl_view == nullptr )
 		gl_view = OSAL::MacOSX::MacGLView::create ( OSAL::MacOSX::MacGLView::kversion_4_1, { { 0, 0 }, { 600, 600 } } );
 	
-	if ( gl_view == nullptr )
+	if ( ( drawing_gl_context == nullptr ) && ( gl_view != nullptr ) )
+	{
+		
+		drawing_gl_context = OSAL::MacOSX::MacGLContextObj::create_share_context ( gl_view -> get_context_obj () );
+		
+		if ( drawing_gl_context != nullptr )
+			gl_view -> set_draw_callback ( & backing_gl_view_render, reinterpret_cast<void *> ( this ) );
+		
+	}
+	
+	if ( ( gl_view == nullptr ) || ( drawing_gl_context == nullptr ) )
 		return nullptr;
 	else
 		os_window -> set_view ( gl_view );
@@ -222,7 +245,12 @@ Argon::UI::GUIWindow::~GUIWindow ()
 	#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
 	#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
 	if ( gl_view != nullptr )
+	{
+		
+		gl_view -> set_draw_callback ( nullptr, nullptr );
 		gl_view -> Deref ();
+		
+	}
 	#endif
 	#endif
 	

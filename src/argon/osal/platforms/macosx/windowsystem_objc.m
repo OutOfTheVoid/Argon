@@ -398,10 +398,18 @@ extern void argon_osal_macosx_openglview_set_draw_callback ( id ns_opengl_view_i
 	
 }
 
+extern id argon_osal_macosx_opengl_context_create_share ( id share_ns_opengl_context_obj )
+{
+	
+	NSOpenGLPixelFormat * pixel_format = [ (NSOpenGLContext *) share_ns_opengl_context_obj pixelFormat];
+	return [[NSOpenGLContext alloc] initWithFormat:pixel_format shareContext:share_ns_opengl_context_obj];
+	
+}
+
 extern void argon_osal_macosx_opengl_context_make_current ( id ns_opengl_context_obj_instance )
 {
 	
-	[(NSOpenGLContext *)ns_opengl_context_obj_instance makeCurrentContext];
+	[ (NSOpenGLContext *) ns_opengl_context_obj_instance makeCurrentContext];
 	
 }
 

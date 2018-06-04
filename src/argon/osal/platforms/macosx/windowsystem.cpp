@@ -35,6 +35,7 @@ extern "C" void argon_osal_macosx_openglview_update ( ObjcID ns_opengl_view_inst
 
 extern "C" void argon_osal_macosx_opengl_context_make_current ( ObjcID ns_opengl_context_obj_instance );
 extern "C" void argon_osal_macosx_opengl_context_flush ( ObjcID ns_opengl_context_obj_instance );
+extern "C" ObjcID argon_osal_macosx_opengl_context_create_share ( ObjcID ns_opengl_context_obj_share );
 
 Argon::OSAL::MacOSX::MacApplication * Argon::OSAL::MacOSX::MacApplication::shared_instance = nullptr;
 
@@ -417,6 +418,18 @@ void Argon::OSAL::MacOSX::MacGLContextObj::flush_back_buffer () const
 {
 	
 	argon_osal_macosx_opengl_context_flush ( ns_opengl_context_obj_instance );
+	
+}
+
+Argon::OSAL::MacOSX::MacGLContextObj * Argon::OSAL::MacOSX::MacGLContextObj::create_share_context ( Argon::OSAL::MacOSX::MacGLContextObj & share )
+{
+	
+	ObjcID new_context_id = argon_osal_macosx_opengl_context_create_share ( share.ns_opengl_context_obj_instance );
+	
+	if ( new_context_id == nullptr )
+		return nullptr;
+	
+	return new MacGLContextObj ( new_context_id );
 	
 }
 
