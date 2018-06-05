@@ -31,6 +31,7 @@ extern "C" void argon_osal_macosx_macwindow_delegate_set_callbacks ( ObjcID ns_w
 
 extern "C" ObjcID argon_osal_macosx_openglview_create ( unsigned int version, Argon_OSAL_MacOSX_WindowSystem_Rect frame_rect, ObjcID * ns_opengl_context_obj_instance );
 extern "C" void argon_osal_macosx_openglview_set_draw_callback ( ObjcID ns_opengl_view_instance, void ( * callback )( void * ), void * callback_data );
+extern "C" void argon_osal_macosx_openglview_set_resize_callback ( id ns_opengl_view_instance, void ( * callback )( void *, GLint, GLint, GLsizei, GLsizei ), void * callback_data );
 extern "C" void argon_osal_macosx_openglview_update ( ObjcID ns_opengl_view_instance );
 
 extern "C" void argon_osal_macosx_opengl_context_make_current ( ObjcID ns_opengl_context_obj_instance );
@@ -330,6 +331,7 @@ Argon::OSAL::MacOSX::MacGLView * Argon::OSAL::MacOSX::MacGLView::create ( Versio
 	MacGLView * view_instance = new MacGLView ( ns_opengl_view_instance, ns_opengl_context_obj_instance );
 		
 	argon_osal_macosx_openglview_set_draw_callback ( ns_opengl_view_instance, & draw_callback_marshaller, reinterpret_cast <void *> ( view_instance ) );
+	argon_osal_macosx_openglview_set_resize_callback ( ns_opengl_view_instance, & resize_callback_marshaller, reinterpret_cast <void *> ( view_instance ) );
 	
 	return view_instance;
 	
@@ -345,6 +347,20 @@ void Argon::OSAL::MacOSX::MacGLView::draw_callback_marshaller ( void * data )
 	
 };
 
+#include <iostream>
+
+void Argon::OSAL::MacOSX::MacGLView::resize_callback_marshaller ( void * data, GLint x, GLint y, GLsizei width, GLsizei height )
+{
+	
+	std :: cout << "resize_callback_marshaller" << std :: endl;
+	
+	MacGLView * view = reinterpret_cast <MacGLView *> ( data );
+	
+	if ( view -> resize_callback )
+		view -> resize_callback ( view, x, y, width, height, view -> resize_callback_data );
+	
+}
+
 Argon::OSAL::MacOSX::MacGLView::~MacGLView ()
 {
 	
@@ -357,7 +373,9 @@ Argon::OSAL::MacOSX::MacGLView::MacGLView ( ObjcID ns_opengl_view_instance, Objc
 	ns_opengl_view_instance ( ns_opengl_view_instance ),
 	gl_context_obj ( ns_opengl_context_obj_instance ),
 	draw_callback_data ( nullptr ),
-	draw_callback ( nullptr )
+	draw_callback ( nullptr ),
+	resize_callback_data ( nullptr ),
+	resize_callback ( nullptr )
 {
 };
 
@@ -387,6 +405,15 @@ void Argon::OSAL::MacOSX::MacGLView::set_draw_callback ( void ( * callback )( Ma
 	
 	this -> draw_callback_data = data;
 	this -> draw_callback = callback;
+	
+}
+
+
+void Argon::OSAL::MacOSX::MacGLView::set_resize_callback ( void ( * callback )( MacGLView * gl_view, GLint x, GLint y, GLsizei width, GLsizei height, void * data ), void * data )
+{
+	
+	this -> resize_callback_data = data;
+	this -> resize_callback = callback;
 	
 }
 

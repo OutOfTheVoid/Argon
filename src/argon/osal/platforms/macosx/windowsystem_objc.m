@@ -9,6 +9,8 @@
 	
 	@public void * draw_callback_data;
 	@public void ( * draw_callback )( void * );
+	@public void * resize_callback_data;
+	@public void ( * resize_callback )( void *, GLint, GLint, GLsizei, GLsizei );
 	
 }
 @end
@@ -20,6 +22,20 @@
 	
 	if ( self -> draw_callback )
 		draw_callback ( self -> draw_callback_data );
+	
+}
+
+#include <stdio.h>
+
+-(void) reshape
+{
+	
+	printf ( "reshape\n" );
+	
+	NSRect bounds = [self bounds];
+	
+	if ( self -> resize_callback )
+		resize_callback ( self -> resize_callback_data, NSMinX ( bounds ), NSMinY ( bounds ), NSWidth ( bounds ), NSHeight ( bounds ) );
 	
 }
 
@@ -395,6 +411,14 @@ extern void argon_osal_macosx_openglview_set_draw_callback ( id ns_opengl_view_i
 	
 	( (Argon_OSAL_MacOSX_ExtNSOpenGLView *) ns_opengl_view_instance ) -> draw_callback = callback;
 	( (Argon_OSAL_MacOSX_ExtNSOpenGLView *) ns_opengl_view_instance ) -> draw_callback_data = callback_data;
+	
+}
+
+extern void argon_osal_macosx_openglview_set_resize_callback ( id ns_opengl_view_instance, void ( * callback )( void *, GLint, GLint, GLsizei, GLsizei ), void * callback_data )
+{
+	
+	( (Argon_OSAL_MacOSX_ExtNSOpenGLView *) ns_opengl_view_instance ) -> resize_callback = callback;
+	( (Argon_OSAL_MacOSX_ExtNSOpenGLView *) ns_opengl_view_instance ) -> resize_callback_data = callback_data;
 	
 }
 

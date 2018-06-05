@@ -16,7 +16,7 @@ Argon::Rendering::FrameBuffer::FrameBuffer ( GLuint gl_framebuffer_name, Context
 
 Argon::Rendering::FrameBuffer::FrameBuffer ( Context * owner_of_default_framebuffer ):
 	RefCounted ( 1, & default_framebuffer_delete, reinterpret_cast<void *> ( this ) ),
-	gl_framebuffer_name ( 0 ),
+	gl_framebuffer_name ( owner_of_default_framebuffer -> default_framebuffer_name ),
 	source_context ( owner_of_default_framebuffer )
 {
 }
@@ -41,6 +41,8 @@ Argon::Rendering::FrameBuffer::~FrameBuffer ()
 	
 };
 
+#include <iostream>
+
 void Argon::Rendering::FrameBuffer::bind ( BindTarget target )
 {
 	
@@ -54,6 +56,8 @@ void Argon::Rendering::FrameBuffer::bind ( BindTarget target )
 			
 			if ( source_context -> current_bound_read_framebuffer != this )
 			{
+			
+				std :: cout << "bind framebuffer read: " << gl_framebuffer_name << std :: endl;
 				
 				source_context -> function_ptrs.bind_framebuffer ( GL_READ_FRAMEBUFFER, gl_framebuffer_name );
 				source_context -> current_bound_read_framebuffer = this;
@@ -68,6 +72,8 @@ void Argon::Rendering::FrameBuffer::bind ( BindTarget target )
 			
 			if ( source_context -> current_bound_write_framebuffer != this )
 			{
+				
+				std :: cout << "bind framebuffer write: " << gl_framebuffer_name << std :: endl;
 				
 				source_context -> function_ptrs.bind_framebuffer ( GL_DRAW_FRAMEBUFFER, gl_framebuffer_name );
 				source_context -> current_bound_write_framebuffer = this;
@@ -87,6 +93,8 @@ void Argon::Rendering::FrameBuffer::bind ( BindTarget target )
 				source_context -> current_bound_write_framebuffer = this;
 				source_context -> current_bound_read_framebuffer = this;
 				
+				std :: cout << "bind framebuffer read-write: " << gl_framebuffer_name << std :: endl;
+				
 			}
 			
 		}
@@ -100,6 +108,8 @@ void Argon::Rendering::FrameBuffer::clear ( const ClearOptions & clear_options )
 {
 	
 	bind ( kbind_target_write );
+	
+	std :: cout << "clear framebuffer " << gl_framebuffer_name << std :: endl;
 	
 	GLbitfield clear_flags = 0;
 	

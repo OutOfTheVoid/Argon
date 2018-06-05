@@ -6,6 +6,8 @@
 
 thread_local Argon::Rendering::Context * Argon::Rendering::Context::current_context = nullptr;
 
+#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+
 void Argon::Rendering::Context::register_external_make_current ()
 {
 	
@@ -13,7 +15,30 @@ void Argon::Rendering::Context::register_external_make_current ()
 	
 }
 
-Argon::Rendering::Context * Argon::Rendering::Context::create_from_gl_context ( OpenGL::IGLContext * gl_context )
+void Argon::Rendering::Context::register_external_framebuffer_bind_read ()
+{
+	
+	this -> current_bound_read_framebuffer = nullptr;
+	
+}
+
+void Argon::Rendering::Context::register_external_framebuffer_bind_write ()
+{
+	
+	this -> current_bound_write_framebuffer = nullptr;
+	
+}
+
+void Argon::Rendering::Context::register_external_framebuffer_bind_read_write ()
+{
+	
+	this -> current_bound_read_framebuffer = nullptr;
+	this -> current_bound_write_framebuffer = nullptr;
+	
+}
+#endif
+
+Argon::Rendering::Context * Argon::Rendering::Context::create_from_gl_context ( OpenGL::IGLContext * gl_context, GLuint default_framebuffer_name )
 {
 	
 	OpenGL::GLFunctionPointers function_ptrs;
@@ -25,17 +50,18 @@ Argon::Rendering::Context * Argon::Rendering::Context::create_from_gl_context ( 
 	function_ptrs.clear_color = reinterpret_cast<decltype( function_ptrs.clear_color )> ( gl_context -> void_gl_get_proc_address ( "glClearColor" ) );
 	function_ptrs.clear_depth = reinterpret_cast<decltype( function_ptrs.clear_depth )> ( gl_context -> void_gl_get_proc_address ( "glClearDepth" ) );
 	
-	return new Context ( gl_context, & function_ptrs );
+	return new Context ( gl_context, & function_ptrs, default_framebuffer_name );
 	
 }
 
-Argon::Rendering::Context::Context ( OpenGL::IGLContext * gl_context, OpenGL::GLFunctionPointers * function_pointers ):
+Argon::Rendering::Context::Context ( OpenGL::IGLContext * gl_context, OpenGL::GLFunctionPointers * function_pointers, GLuint default_framebuffer_name ):
 	RefCounted ( 1 ),
 	gl_context ( gl_context ),
 	function_ptrs (),
 	current_bound_read_framebuffer ( nullptr ),
 	current_bound_write_framebuffer ( nullptr ),
-	default_framebuffer ( nullptr )
+	default_framebuffer ( nullptr ),
+	default_framebuffer_name ( default_framebuffer_name )
 {
 	
 	default_framebuffer = new FrameBuffer ( this );

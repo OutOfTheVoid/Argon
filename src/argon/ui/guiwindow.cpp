@@ -61,13 +61,44 @@ void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
 		
 };
 
+#include <iostream>
+
 #if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
 void Argon::UI::GUIWindow::backing_gl_view_render ( OSAL::MacOSX::MacGLView * gl_view, void * data )
 {
 	
 	GUIWindow * this_window = reinterpret_cast <GUIWindow *> ( data );
 	
+	OSAL::MacOSX::MacGLContextObj & gl_view_gl_context = this_window -> gl_view -> get_context_obj ();
 	
+	gl_view_gl_context.make_current ();
+	this_window -> gl_bind_framebuffer ( GL_DRAW_FRAMEBUFFER, 0 );
+	this_window -> gl_bind_framebuffer ( GL_READ_FRAMEBUFFER, this_window -> transfer_framebuffer );
+	this_window -> gl_blit_framebuffers ( 0, 0, this_window -> transfer_framebuffer_width, this_window -> transfer_framebuffer_height, 0, 0, this_window -> transfer_framebuffer_width, this_window -> transfer_framebuffer_height, GL_COLOR_BUFFER_BIT, GL_NEAREST );
+	this_window -> gl_bind_framebuffer ( GL_READ_FRAMEBUFFER, 0 );
+	gl_view_gl_context.flush_back_buffer ();
+	
+	this_window -> rendering_context -> register_external_framebuffer_bind_read_write ();
+	
+}
+
+void Argon::UI::GUIWindow::backing_gl_view_resize ( OSAL::MacOSX::MacGLView * gl_view, GLint x, GLint y, GLsizei width, GLsizei height, void * data )
+{
+	
+	GUIWindow * this_window = reinterpret_cast <GUIWindow *> ( data );
+	
+	OSAL::MacOSX::MacGLContextObj & gl_view_gl_context = this_window -> gl_view -> get_context_obj ();
+	
+	gl_view_gl_context.make_current ();
+	this_window -> gl_bind_renderbuffer ( GL_RENDERBUFFER, this_window -> transfer_framebuffer_depth_renderbuffer );
+	this_window -> gl_renderbuffer_storage ( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height );
+	this_window -> gl_bind_renderbuffer ( GL_RENDERBUFFER, 0 );
+	this_window -> gl_bind_texture ( GL_TEXTURE_2D, this_window -> transfer_framebuffer_texture );
+	this_window -> gl_tex_image_2d ( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0 );
+	this_window -> gl_viewport ( x, y, width, height );
+	
+	this_window -> transfer_framebuffer_width = width;
+	this_window -> transfer_framebuffer_height = height;
 	
 }
 #endif
@@ -84,11 +115,55 @@ Argon::Rendering::Context * Argon::UI::GUIWindow::get_render_context ( bool temp
 	
 	if ( ( drawing_gl_context == nullptr ) && ( gl_view != nullptr ) )
 	{
+	
+		OSAL::MacOSX::MacGLContextObj & gl_view_gl_context = gl_view -> get_context_obj ();
 		
-		drawing_gl_context = OSAL::MacOSX::MacGLContextObj::create_share_context ( gl_view -> get_context_obj () );
+		drawing_gl_context = OSAL::MacOSX::MacGLContextObj::create_share_context ( gl_view_gl_context );
 		
-		if ( drawing_gl_context != nullptr )
-			gl_view -> set_draw_callback ( & backing_gl_view_render, reinterpret_cast<void *> ( this ) );
+		if ( drawing_gl_context == nullptr )
+			return nullptr;
+		
+		drawing_gl_context -> make_current ();
+		
+		gl_gen_framebuffers = drawing_gl_context -> get_proc_address<decltype ( gl_gen_framebuffers )> ( "glGenFramebuffers" );
+		gl_bind_framebuffer = drawing_gl_context -> get_proc_address <decltype ( gl_bind_framebuffer )> ( "glBindFramebuffer" );
+		gl_gen_textures = drawing_gl_context -> get_proc_address <decltype ( gl_gen_textures )> ( "glGenTextures" );
+		gl_bind_texture = drawing_gl_context -> get_proc_address <decltype ( gl_bind_texture )> ( "glBindTexture" );
+		gl_tex_image_2d = drawing_gl_context -> get_proc_address <decltype ( gl_tex_image_2d )> ( "glTexImage2D" );
+		gl_tex_parameter_i = drawing_gl_context -> get_proc_address <decltype ( gl_tex_parameter_i )> ( "glTexParameteri" );
+		gl_gen_renderbuffers = drawing_gl_context -> get_proc_address <decltype ( gl_gen_renderbuffers )> ( "glGenRenderbuffers" );
+		gl_bind_renderbuffer = drawing_gl_context -> get_proc_address <decltype ( gl_bind_renderbuffer )> ( "glBindRenderbuffer" );
+		gl_renderbuffer_storage = drawing_gl_context -> get_proc_address <decltype ( gl_renderbuffer_storage )> ( "glRenderbufferStorage" );
+		gl_framebuffer_renderbuffer = drawing_gl_context -> get_proc_address <decltype ( gl_framebuffer_renderbuffer )> ( "glFramebufferRenderbuffer" );
+		gl_framebuffer_texture = drawing_gl_context -> get_proc_address <decltype ( gl_framebuffer_texture )> ( "glFramebufferTexture" );
+		gl_draw_buffers = drawing_gl_context -> get_proc_address <decltype ( gl_draw_buffers )> ( "glDrawBuffers" );
+		gl_blit_framebuffers = drawing_gl_context -> get_proc_address <decltype ( gl_blit_framebuffers )> ( "glBlitFramebuffer" );
+		gl_check_framebuffer_status = drawing_gl_context -> get_proc_address <decltype ( gl_check_framebuffer_status )> ( "glCheckFramebufferStatus" );
+		gl_get_error = drawing_gl_context -> get_proc_address <decltype ( gl_get_error )> ( "glGetError" );
+		gl_viewport = drawing_gl_context -> get_proc_address <decltype( gl_viewport )> ( "glViewport" );
+		
+		gl_gen_framebuffers ( 1, & transfer_framebuffer );
+		gl_bind_framebuffer ( GL_FRAMEBUFFER, transfer_framebuffer );
+		
+		gl_gen_textures ( 1, & transfer_framebuffer_texture );
+		gl_bind_texture ( GL_TEXTURE_2D, transfer_framebuffer_texture );
+		gl_tex_image_2d ( GL_TEXTURE_2D, 0, GL_RGB, 600, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, 0 );
+		gl_tex_parameter_i ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+		gl_tex_parameter_i ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+		
+		transfer_framebuffer_width = 600;
+		transfer_framebuffer_height = 600;
+		
+		gl_gen_renderbuffers ( 1, & transfer_framebuffer_depth_renderbuffer );
+		gl_bind_renderbuffer ( GL_RENDERBUFFER, transfer_framebuffer_depth_renderbuffer );
+		gl_renderbuffer_storage ( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 600, 600 );
+		gl_bind_renderbuffer ( GL_RENDERBUFFER, 0 );
+		
+		gl_framebuffer_renderbuffer ( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, transfer_framebuffer_depth_renderbuffer );
+		gl_framebuffer_texture ( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, transfer_framebuffer_texture, 0 );
+		
+		GLenum draw_buffers [ 1 ] = { GL_COLOR_ATTACHMENT0 };
+		gl_draw_buffers ( 1, draw_buffers );
 		
 	}
 	
@@ -97,11 +172,14 @@ Argon::Rendering::Context * Argon::UI::GUIWindow::get_render_context ( bool temp
 	else
 		os_window -> set_view ( gl_view );
 	
-	rendering_context = Rendering::Context::create_from_gl_context ( & gl_view -> get_context_obj () );
+	rendering_context = Argon::Rendering::Context::create_from_gl_context ( drawing_gl_context, transfer_framebuffer_texture );
 	#endif
 	
-	if ( ( rendering_context != nullptr ) && ( ! temporary) )
+	if ( ( rendering_context != nullptr ) && ( ! temporary ) )
 		rendering_context -> Ref ();
+	
+	gl_view -> set_draw_callback ( & backing_gl_view_render, reinterpret_cast<void *> ( this ) );
+	gl_view -> set_resize_callback ( & backing_gl_view_resize, reinterpret_cast<void *> ( this ) );
 	
 	return rendering_context;
 	

@@ -64,7 +64,32 @@ namespace Argon::UI
 		OSAL::MacOSX::MacGLView * gl_view;
 		OSAL::MacOSX::MacGLContextObj * drawing_gl_context;
 		
+		GLuint transfer_framebuffer;
+		GLuint transfer_framebuffer_texture;
+		GLuint transfer_framebuffer_depth_renderbuffer;
+		
+		GLint transfer_framebuffer_width;
+		GLint transfer_framebuffer_height;
+		
+		void ( * gl_gen_framebuffers ) ( GLsizei n, GLuint * frame_buffers );
+		void ( * gl_bind_framebuffer ) ( GLenum target, GLuint frame_buffer );
+		void ( * gl_gen_textures ) ( GLsizei n, GLuint * textures );
+		void ( * gl_bind_texture ) ( GLenum target, GLuint texture );
+		void ( * gl_tex_image_2d ) ( GLenum target, GLint level, GLint internal_format, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * data );
+		void ( * gl_tex_parameter_i ) ( GLenum target, GLenum param_name, GLint param );
+		void ( * gl_gen_renderbuffers ) ( GLsizei n, GLuint * render_buffers );
+		void ( * gl_bind_renderbuffer ) ( GLenum target, GLuint render_buffer );
+		void ( * gl_renderbuffer_storage ) ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height );
+		void ( * gl_framebuffer_renderbuffer ) ( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
+		void ( * gl_framebuffer_texture ) ( GLenum target, GLenum attachment, GLuint texture, GLint level );
+		void ( * gl_draw_buffers ) ( GLsizei n, const GLenum * bufs );
+		void ( * gl_blit_framebuffers ) ( GLint srcX0, GLint srcY0,GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
+		GLenum ( * gl_check_framebuffer_status ) ( GLenum target );
+		GLenum ( * gl_get_error ) ();
+		void ( * gl_viewport ) ( GLint x, GLint y, GLsizei width, GLsizei height );
+		
 		static void backing_gl_view_render ( OSAL::MacOSX::MacGLView * gl_view, void * data );
+		static void backing_gl_view_resize ( OSAL::MacOSX::MacGLView * gl_view, GLint x, GLint y, GLsizei width, GLsizei height, void * data );
 		#endif
 		
 		Rendering::Context * rendering_context;

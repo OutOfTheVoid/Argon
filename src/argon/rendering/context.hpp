@@ -28,6 +28,12 @@ namespace Argon::Rendering
 		
 		FrameBuffer * get_default_framebuffer ();
 		
+		#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+		void register_external_framebuffer_bind_read ();
+		void register_external_framebuffer_bind_write ();
+		void register_external_framebuffer_bind_read_write ();
+		#endif
+		
 	private:
 		
 		friend class UI::GUIWindow;
@@ -36,11 +42,12 @@ namespace Argon::Rendering
 		
 		#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
 		
-		static Context * create_from_gl_context ( OpenGL::IGLContext * gl_context );
+		static Context * create_from_gl_context ( OpenGL::IGLContext * gl_context, GLuint default_framebuffer_name );
 		
-		Context ( OpenGL::IGLContext * gl_context, OpenGL::GLFunctionPointers * function_pointers );
+		Context ( OpenGL::IGLContext * gl_context, OpenGL::GLFunctionPointers * function_pointers, GLuint default_framebuffer_name );
 		
 		OpenGL::IGLContext * gl_context;
+		GLuint default_framebuffer_name;
 		
 		Argon::Rendering::OpenGL::GLFunctionPointers function_ptrs;
 		

@@ -15,6 +15,7 @@
 #include <argon/memory/refcounted.hpp>
 
 #include <argon/rendering/backends/opengl/context.hpp>
+#include <argon/rendering/backends/opengl/opengl.hpp>
 
 void PlatformDeInit ();
 
@@ -196,6 +197,7 @@ namespace Argon::OSAL::MacOSX
 		const MacGLContextObj & get_context_obj () const;
 		
 		void set_draw_callback ( void ( * callback )( MacGLView * gl_view, void * data ), void * data );
+		void set_resize_callback ( void ( * callback )( MacGLView * gl_view, GLint x, GLint y, GLsizei width, GLsizei height, void * data ), void * data );
 		
 		void update ();
 		
@@ -213,7 +215,11 @@ namespace Argon::OSAL::MacOSX
 		void * draw_callback_data;
 		void ( * draw_callback )( MacGLView * gl_view, void * data );
 		
+		void * resize_callback_data;
+		void ( * resize_callback )( MacGLView * gl_view, GLint x, GLint y, GLsizei width, GLsizei height, void * data );
+		
 		static void draw_callback_marshaller ( void * data );
+		static void resize_callback_marshaller ( void * data, GLint x, GLint y, GLsizei width, GLsizei height );
 		
 	};
 	
