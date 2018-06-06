@@ -1,5 +1,5 @@
-#ifndef ARGON_RENDERING_TEXTURE_HPP
-#define ARGON_RENDERING_TEXTURE_HPP
+#ifndef ARGON_RENDERING_TEXTUREBASE_H
+#define ARGON_RENDERING_TEXTUREBASE_H
 
 #include <argon/rendering/rendering.hpp>
 #include <argon/rendering/targets.hpp>
@@ -12,14 +12,18 @@
 namespace Argon::Rendering
 {
 	
-	class Context;
-	
-	class Texture : public Memory::RefCounted
+	class TextureBase : public Memory::RefCounted
 	{
-	public:
+	protected:
 		
+		TextureBase ();
 		
+	protected:
 		
-	}
+		~TextureBase ();
+		
+	};
 	
 }
+
+#endif

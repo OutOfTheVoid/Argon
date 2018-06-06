@@ -16,6 +16,7 @@ namespace Argon::Rendering
 {
 	
 	class FrameBuffer;
+	class Texture2D;
 	
 	class Context : public Memory::RefCounted, public Argon::Events::EventDispatcher
 	{
@@ -27,11 +28,16 @@ namespace Argon::Rendering
 		void flush_back_buffer () const;
 		
 		FrameBuffer * get_default_framebuffer ();
+		FrameBuffer * create_framebuffer ();
+		
+		Texture2D * create_texture ( GLsizei width, GLsizei height, GLint level );
 		
 		#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
 		void register_external_framebuffer_bind_read ();
 		void register_external_framebuffer_bind_write ();
 		void register_external_framebuffer_bind_read_write ();
+		
+		void register_external_texture2d_bind ();
 		#endif
 		
 	private:
@@ -55,6 +61,9 @@ namespace Argon::Rendering
 		FrameBuffer * current_bound_read_framebuffer;
 		FrameBuffer * current_bound_write_framebuffer;
 		FrameBuffer * default_framebuffer;
+		
+		friend class Texture2D;
+		Texture2D * current_bound_texture_2d;
 		
 		static thread_local Context * current_context;
 		
