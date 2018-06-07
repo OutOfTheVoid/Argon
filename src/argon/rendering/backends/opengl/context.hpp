@@ -16,8 +16,6 @@ namespace Argon::Rendering::OpenGL
 		
 		virtual void * void_gl_get_proc_address ( const String & gl_symbol ) const = 0;
 		
-		
-		
 	};
 	
 }

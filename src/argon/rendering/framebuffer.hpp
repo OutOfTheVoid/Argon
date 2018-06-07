@@ -18,17 +18,6 @@ namespace Argon::Rendering
 	{
 	public:
 		
-		enum BindTarget
-		{
-			
-			kbind_target_read = 1,
-			kbind_target_write = 2,
-			kbind_target_read_write = 3
-			
-		};
-		
-		void bind ( BindTarget target );
-		
 		typedef struct
 		{
 			
@@ -41,7 +30,22 @@ namespace Argon::Rendering
 		} ClearOptions;
 		
 		void clear ( const ClearOptions & clear_options );
+	
+	protected:
 		
+		#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
+		enum BindTarget
+		{
+			
+			kbind_target_read = 1,
+			kbind_target_write = 2,
+			kbind_target_read_write = 3
+			
+		};
+		
+		void bind ( BindTarget target );
+		#endif
+	
 	private:
 		
 		friend class Context;

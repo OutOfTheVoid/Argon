@@ -1,6 +1,8 @@
 #include <argon/rendering/context.hpp>
 #include <argon/rendering/framebuffer.hpp>
 #include <argon/rendering/texture2d.hpp>
+#include <argon/rendering/vertexbuffer.hpp>
+#include <argon/rendering/indexbuffer.hpp>
 #include <cstring>
 
 #if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
@@ -19,29 +21,44 @@ void Argon::Rendering::Context::register_external_make_current ()
 void Argon::Rendering::Context::register_external_framebuffer_bind_read ()
 {
 	
-	this -> current_bound_read_framebuffer = nullptr;
+	current_context -> current_bound_read_framebuffer = nullptr;
 	
 }
 
 void Argon::Rendering::Context::register_external_framebuffer_bind_write ()
 {
 	
-	this -> current_bound_write_framebuffer = nullptr;
+	current_context -> current_bound_write_framebuffer = nullptr;
 	
 }
 
 void Argon::Rendering::Context::register_external_framebuffer_bind_read_write ()
 {
 	
-	this -> current_bound_read_framebuffer = nullptr;
-	this -> current_bound_write_framebuffer = nullptr;
+	current_context -> current_bound_read_framebuffer = nullptr;
+	current_context -> current_bound_write_framebuffer = nullptr;
 	
 }
 
 void Argon::Rendering::Context::register_external_texture2d_bind ()
 {
 	
-	this -> current_bound_texture_2d = nullptr;
+	current_context -> current_bound_texture_2d = nullptr;
+	
+}
+
+
+void Argon::Rendering::Context::register_external_vertex_buffer_bind ()
+{
+	
+	current_context -> current_bound_vertex_buffer = nullptr;
+	
+}
+
+void Argon::Rendering::Context::register_external_index_buffer_bind ()
+{
+	
+	current_context -> current_bound_index_buffer = nullptr;
 	
 }
 #endif
@@ -67,10 +84,17 @@ Argon::Rendering::Context * Argon::Rendering::Context::create_from_gl_context ( 
 	function_ptrs.bind_texture = reinterpret_cast<decltype( function_ptrs.bind_texture )> ( gl_context -> void_gl_get_proc_address ( "glBindTexture" ) );
 	function_ptrs.tex_image_2d = reinterpret_cast<decltype( function_ptrs.tex_image_2d )> ( gl_context -> void_gl_get_proc_address ( "glTexImage2D" ) );
 	function_ptrs.tex_parameter_i = reinterpret_cast<decltype( function_ptrs.tex_parameter_i )> ( gl_context -> void_gl_get_proc_address ( "glTexParameteri" ) );
-
+	
 	function_ptrs.gen_renderbuffers = reinterpret_cast<decltype( function_ptrs.gen_renderbuffers )> ( gl_context -> void_gl_get_proc_address ( "glGenRenderbuffers" ) );
 	function_ptrs.bind_renderbuffer = reinterpret_cast<decltype( function_ptrs.bind_renderbuffer )> ( gl_context -> void_gl_get_proc_address ( "glBindRenderbuffer" ) );
 	function_ptrs.renderbuffer_storage = reinterpret_cast<decltype( function_ptrs.renderbuffer_storage )> ( gl_context -> void_gl_get_proc_address ( "glRenderbufferStorage" ) );
+	function_ptrs.delete_renderbuffers = reinterpret_cast<decltype( function_ptrs.delete_renderbuffers )> ( gl_context -> void_gl_get_proc_address ( "glDeleteRenderbuffers" ) );
+	
+	function_ptrs.gen_buffers = reinterpret_cast<decltype( function_ptrs.gen_buffers )> ( gl_context -> void_gl_get_proc_address ( "glGenBuffers" ) );
+	function_ptrs.delete_buffers = reinterpret_cast<decltype( function_ptrs.delete_buffers )> ( gl_context -> void_gl_get_proc_address ( "glDeleteBuffers" ) );
+	function_ptrs.bind_buffer = reinterpret_cast<decltype( function_ptrs.bind_buffer )> ( gl_context -> void_gl_get_proc_address ( "glBindBuffer" ) );
+	function_ptrs.buffer_data = reinterpret_cast<decltype( function_ptrs.buffer_data )> ( gl_context -> void_gl_get_proc_address ( "glBufferData" ) );
+	function_ptrs.sub_buffer_data = reinterpret_cast<decltype( function_ptrs.sub_buffer_data )> ( gl_context -> void_gl_get_proc_address ( "glBufferSubData" ) );
 	
 	function_ptrs.draw_buffers = reinterpret_cast<decltype( function_ptrs.draw_buffers )> ( gl_context -> void_gl_get_proc_address ( "glDrawBuffers" ) );
 	function_ptrs.viewport = reinterpret_cast<decltype( function_ptrs.viewport )> ( gl_context -> void_gl_get_proc_address ( "glViewport" ) );
@@ -150,7 +174,7 @@ Argon::Rendering::FrameBuffer * Argon::Rendering::Context::create_framebuffer ()
 	
 }
 
-Argon::Rendering::Texture2D * Argon::Rendering::Context::create_texture ( GLsizei width, GLsizei height, GLint level )
+Argon::Rendering::Texture2D * Argon::Rendering::Context::create_texture ()
 {
 	
 	make_current ();
@@ -164,6 +188,36 @@ Argon::Rendering::Texture2D * Argon::Rendering::Context::create_texture ( GLsize
 	Texture2D * new_tex = new Texture2D ( texture_name, this );
 	//new_tex -> set_size ( width, height, level );
 	return new_tex;
+	
+}
+
+Argon::Rendering::VertexBuffer * Argon::Rendering::Context::create_vertex_buffer ()
+{
+	
+	make_current ();
+	
+	GLuint buffer_name = 0;
+	function_ptrs.gen_buffers ( 1, & buffer_name );
+	
+	if ( buffer_name == 0 )
+		return nullptr;
+		
+	return new VertexBuffer ( buffer_name, this );
+	
+}
+
+Argon::Rendering::IndexBuffer * Argon::Rendering::Context::create_index_buffer ()
+{
+	
+	make_current ();
+	
+	GLuint buffer_name = 0;
+	function_ptrs.gen_buffers ( 1, & buffer_name );
+	
+	if ( buffer_name == 0 )
+		return nullptr;
+		
+	return new IndexBuffer ( buffer_name, this );
 	
 }
 

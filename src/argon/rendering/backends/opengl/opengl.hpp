@@ -38,10 +38,18 @@ namespace Argon::Rendering::OpenGL
 		void ( * bind_texture ) ( GLenum target, GLuint texture );
 		void ( * tex_image_2d ) ( GLenum target, GLint level, GLint internal_format, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * data );
 		void ( * tex_parameter_i ) ( GLenum target, GLenum param_name, GLint param );
+		void ( * tex_sub_image_2d ) ( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels );
 		
 		void ( * gen_renderbuffers ) ( GLsizei n, GLuint * render_buffers );
 		void ( * bind_renderbuffer ) ( GLenum target, GLuint render_buffer );
 		void ( * renderbuffer_storage ) ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height );
+		void ( * delete_renderbuffers ) ( GLsizei n, GLuint * render_buffers );
+		
+		void ( * gen_buffers ) ( GLsizei n, GLuint * buffers );
+		void ( * delete_buffers ) ( GLsizei n, GLuint * buffers );
+		void ( * bind_buffer ) ( GLenum target, GLuint buffer );
+		void ( * buffer_data ) ( GLenum target​, GLsizeiptr size​, const GLvoid * data​, GLenum usage );
+		void ( * sub_buffer_data ) ( GLenum target​, GLintptr offset​, GLsizeiptr size​, const GLvoid * data​ );
 		
 		void ( * draw_buffers ) ( GLsizei n, const GLenum * bufs );
 		

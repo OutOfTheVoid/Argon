@@ -14,8 +14,6 @@ using Argon::UI::GUIWindow;
 using Argon::Rendering::Context;
 using Argon::Rendering::FrameBuffer;
 
-using Argon::Events::event_id_hash;
-
 GUIWindow * main_window = nullptr;
 
 void AppEntry ()
