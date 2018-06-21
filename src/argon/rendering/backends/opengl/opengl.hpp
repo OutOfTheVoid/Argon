@@ -51,6 +51,27 @@ namespace Argon::Rendering::OpenGL
 		void ( * buffer_data ) ( GLenum target​, GLsizeiptr size​, const GLvoid * data​, GLenum usage );
 		void ( * sub_buffer_data ) ( GLenum target​, GLintptr offset​, GLsizeiptr size​, const GLvoid * data​ );
 		
+		GLuint ( * create_shader ) ( GLenum type );
+		void ( * delete_shader ) ( GLuint name );
+		void ( * shader_source ) ( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * lengths );
+		void ( * compile_shader ) ( GLuint shader );
+		void ( * get_shader_iv ) ( GLuint shader, GLenum param_name, GLint * params );
+		void ( * get_shader_info_log ) ( GLuint shader, GLsizei max_length, GLsizei * length, GLchar * info_log );
+		
+		GLuint ( * create_shader_program ) ( void );
+		void ( * delete_shader_program ) ( GLuint name );
+		void ( * attach_shader ) ( GLuint program, GLuint shader );
+		void ( * detach_shader ) ( GLuint program, GLuint shader );
+		void ( * link_program ) ( GLuint name );
+		void ( * get_program_iv ) ( GLuint program, GLenum pname, GLint * params );
+		void ( * bind_program ) ( GLuint program );
+		
+		void ( * gen_vertex_arrays ) ( GLsizei n, GLuint * buffers );
+		void ( * delete_vertex_arrays ) ( GLsizei n, GLuint * buffers );
+		void ( * bind_vertex_array ) ( GLuint name );
+		void ( * enable_vertex_attribute_array ) ( GLuint attribute );
+		void ( * disable_vertex_attribute_array ) ( GLuint attribute );
+		
 		void ( * draw_buffers ) ( GLsizei n, const GLenum * bufs );
 		
 		void ( * viewport ) ( GLint x, GLint y, GLsizei width, GLsizei height );

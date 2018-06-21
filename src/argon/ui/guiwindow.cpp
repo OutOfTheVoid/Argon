@@ -176,7 +176,7 @@ Argon::Rendering::Context * Argon::UI::GUIWindow::get_render_context ( bool temp
 	#endif
 	
 	if ( ( rendering_context != nullptr ) && ( ! temporary ) )
-		rendering_context -> Ref ();
+		rendering_context -> ref ();
 	
 	gl_view -> set_draw_callback ( & backing_gl_view_render, reinterpret_cast<void *> ( this ) );
 	gl_view -> set_resize_callback ( & backing_gl_view_resize, reinterpret_cast<void *> ( this ) );
@@ -315,10 +315,10 @@ void Argon::UI::GUIWindow::set_fullscreen ( bool fullscreen )
 Argon::UI::GUIWindow::~GUIWindow ()
 {
 	
-	os_window -> Deref (); // this should be all we ever need to do here.
+	os_window -> deref (); // this should be all we ever need to do here.
 	
 	if ( rendering_context != nullptr )
-		rendering_context -> Deref ();
+		rendering_context -> deref ();
 	
 	#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
 	#if(ARGON_PLATFORM_OS == ARGON_PLATFORM_OS_VALUE_MACOSX)
@@ -326,7 +326,7 @@ Argon::UI::GUIWindow::~GUIWindow ()
 	{
 		
 		gl_view -> set_draw_callback ( nullptr, nullptr );
-		gl_view -> Deref ();
+		gl_view -> deref ();
 		
 	}
 	#endif
@@ -343,7 +343,7 @@ bool Argon::UI::GUIWindow::should_close_event_dispatcher ( void * data )
 	
 	window -> dispatch_event ( window_should_close_event );
 	bool cancel = window_should_close_event -> was_close_cancelled ();
-	window_should_close_event -> Deref ();
+	window_should_close_event -> deref ();
 	
 	return ! cancel;
 	
@@ -358,6 +358,6 @@ void Argon::UI::GUIWindow::will_close_event_dispatcher ( void * data )
 	
 	window -> dispatch_event ( window_will_close_event );
 	
-	window_will_close_event -> Deref ();
+	window_will_close_event -> deref ();
 	
 }

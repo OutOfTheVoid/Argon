@@ -81,7 +81,7 @@ namespace Argon::Events
 				{
 					
 					element_finalizer ( & mappings [ i ].element );
-					mappings [ i ].event_definition -> Deref ();
+					mappings [ i ].event_definition -> deref ();
 					
 				}
 				
@@ -106,7 +106,7 @@ namespace Argon::Events
 					MappingElement mapping { default_value, event_definition };
 					
 					mappings.push ( mapping );
-					event_definition -> Ref ();
+					event_definition -> ref ();
 					
 					return & mappings [ mapping_count ].element;
 					

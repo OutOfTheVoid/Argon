@@ -19,6 +19,10 @@ namespace Argon::Rendering
 	class Texture2D;
 	class VertexBuffer;
 	class IndexBuffer;
+	class VertexShader;
+	class FragmentShader;
+	class ShaderProgram;
+	class VertexSpecification;
 	
 	class Context : public Memory::RefCounted, public Argon::Events::EventDispatcher
 	{
@@ -36,6 +40,12 @@ namespace Argon::Rendering
 		VertexBuffer * create_vertex_buffer ();
 		IndexBuffer * create_index_buffer ();
 		
+		VertexShader * creat_vertex_shader ();
+		FragmentShader * create_fragment_shader ();
+		ShaderProgram * create_shader_program ();
+		
+		VertexSpecification * create_vertex_specification ();
+		
 		#if(ARGON_RENDERING_BACKEND == ARGON_RENDERING_BACKEND_OPENGL)
 		static void register_external_framebuffer_bind_read ();
 		static void register_external_framebuffer_bind_write ();
@@ -44,6 +54,7 @@ namespace Argon::Rendering
 		static void register_external_index_buffer_bind ();
 		
 		static void register_external_texture2d_bind ();
+		static void register_external_shader_program ();
 		#endif
 		
 	private:
@@ -76,6 +87,11 @@ namespace Argon::Rendering
 		
 		friend class IndexBuffer;
 		IndexBuffer * current_bound_index_buffer;
+		
+		friend class VertexShader;
+		friend class FragmentShader;
+		friend class ShaderProgram;
+		ShaderProgram * current_bound_shader_program;
 		
 		static thread_local Context * current_context;
 		

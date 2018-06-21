@@ -61,6 +61,13 @@ void Argon::Rendering::Context::register_external_index_buffer_bind ()
 	current_context -> current_bound_index_buffer = nullptr;
 	
 }
+
+void Argon::Rendering::Context::register_external_shader_program ()
+{
+	
+	current_context -> current_bound_shader_program = nullptr;
+	
+}
 #endif
 
 Argon::Rendering::Context * Argon::Rendering::Context::create_from_gl_context ( OpenGL::IGLContext * gl_context, GLuint default_framebuffer_name )
@@ -96,6 +103,21 @@ Argon::Rendering::Context * Argon::Rendering::Context::create_from_gl_context ( 
 	function_ptrs.buffer_data = reinterpret_cast<decltype( function_ptrs.buffer_data )> ( gl_context -> void_gl_get_proc_address ( "glBufferData" ) );
 	function_ptrs.sub_buffer_data = reinterpret_cast<decltype( function_ptrs.sub_buffer_data )> ( gl_context -> void_gl_get_proc_address ( "glBufferSubData" ) );
 	
+	function_ptrs.create_shader = reinterpret_cast<decltype( function_ptrs.create_shader )> ( gl_context -> void_gl_get_proc_address ( "glCreateShader" ) );
+	function_ptrs.delete_shader = reinterpret_cast<decltype( function_ptrs.delete_shader )> ( gl_context -> void_gl_get_proc_address ( "glDeleteShader" ) );
+	function_ptrs.shader_source = reinterpret_cast<decltype( function_ptrs.shader_source )> ( gl_context -> void_gl_get_proc_address ( "glShaderSource" ) );
+	function_ptrs.compile_shader = reinterpret_cast<decltype( function_ptrs.compile_shader )> ( gl_context -> void_gl_get_proc_address ( "glCompileShader" ) );
+	function_ptrs.get_shader_iv = reinterpret_cast<decltype( function_ptrs.get_shader_iv )> ( gl_context -> void_gl_get_proc_address ( "glGetShaderiv" ) );
+	function_ptrs.get_shader_info_log = reinterpret_cast<decltype( function_ptrs.get_shader_info_log )> ( gl_context -> void_gl_get_proc_address ( "glGetShaderInfoLog" ) );
+	
+	function_ptrs.create_shader_program = reinterpret_cast<decltype( function_ptrs.create_shader_program )> ( gl_context -> void_gl_get_proc_address ( "glCreateProgram" ) );
+	function_ptrs.delete_shader_program = reinterpret_cast<decltype( function_ptrs.delete_shader_program )> ( gl_context -> void_gl_get_proc_address ( "glDeleteProgram" ) );
+	function_ptrs.attach_shader = reinterpret_cast<decltype( function_ptrs.attach_shader )> ( gl_context -> void_gl_get_proc_address ( "glAttachShader" ) );
+	function_ptrs.detach_shader = reinterpret_cast<decltype( function_ptrs.detach_shader )> ( gl_context -> void_gl_get_proc_address ( "glDetachShader" ) );
+	function_ptrs.link_program = reinterpret_cast<decltype( function_ptrs.link_program )> ( gl_context -> void_gl_get_proc_address ( "glLinkProgram" ) );
+	function_ptrs.get_program_iv = reinterpret_cast<decltype( function_ptrs.get_program_iv )> ( gl_context -> void_gl_get_proc_address ( "glGetProgramiv" ) );
+	function_ptrs.bind_program = reinterpret_cast<decltype( function_ptrs.bind_program )> ( gl_context -> void_gl_get_proc_address ( "glBindProgram" ) );
+	
 	function_ptrs.draw_buffers = reinterpret_cast<decltype( function_ptrs.draw_buffers )> ( gl_context -> void_gl_get_proc_address ( "glDrawBuffers" ) );
 	function_ptrs.viewport = reinterpret_cast<decltype( function_ptrs.viewport )> ( gl_context -> void_gl_get_proc_address ( "glViewport" ) );
 	
@@ -112,12 +134,15 @@ Argon::Rendering::Context::Context ( OpenGL::IGLContext * gl_context, OpenGL::GL
 	current_bound_read_framebuffer ( nullptr ),
 	current_bound_write_framebuffer ( nullptr ),
 	default_framebuffer ( nullptr ),
-	default_framebuffer_name ( default_framebuffer_name )
+	default_framebuffer_name ( default_framebuffer_name ),
+	current_bound_index_buffer ( nullptr ),
+	current_bound_vertex_buffer ( nullptr ),
+	current_bound_shader_program ( nullptr )
 {
 	
 	default_framebuffer = new FrameBuffer ( this );
 	
-	gl_context -> Ref ();
+	gl_context -> ref ();
 	memcpy ( & function_ptrs, function_pointers, sizeof ( OpenGL::GLFunctionPointers ) );
 	
 }
@@ -125,8 +150,8 @@ Argon::Rendering::Context::Context ( OpenGL::IGLContext * gl_context, OpenGL::GL
 Argon::Rendering::Context::~Context ()
 {
 	
-	default_framebuffer -> Deref ();
-	gl_context -> Deref ();
+	default_framebuffer -> deref ();
+	gl_context -> deref ();
 	
 }
 
@@ -218,6 +243,16 @@ Argon::Rendering::IndexBuffer * Argon::Rendering::Context::create_index_buffer (
 		return nullptr;
 		
 	return new IndexBuffer ( buffer_name, this );
+	
+}
+
+Argon::Rendering::VertexSpecification * Argon::Rendering::Context::create_vertex_specification ()
+{
+	
+	make_current ();
+	
+	GLuint buffer_name = 0;
+	function_ptrs.gen_vertex_arrays ( 1, & buffer_name );
 	
 }
 

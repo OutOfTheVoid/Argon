@@ -36,7 +36,7 @@ Argon::UI::Events::WindowEvent::WindowEvent ( const EventDefinition * definition
 {
 	
 	if ( source_window != nullptr )
-		source_window -> Ref ();
+		source_window -> ref ();
 	
 }
 
@@ -44,7 +44,7 @@ Argon::UI::Events::WindowEvent::~WindowEvent ()
 {
 	
 	if ( source_window != nullptr )
-		source_window -> Deref ();
+		source_window -> deref ();
 	
 }
 
@@ -68,7 +68,7 @@ Argon::UI::Events::RenderEvent::RenderEvent ( GUIWindow * source_window, Context
 {
 		
 	if ( source_context != nullptr )
-		source_context -> Ref ();
+		source_context -> ref ();
 	
 };
 
@@ -76,7 +76,7 @@ Argon::UI::Events::RenderEvent::~RenderEvent ()
 {
 		
 	if ( source_context != nullptr )
-		source_context -> Deref ();
+		source_context -> deref ();
 	
 }
 

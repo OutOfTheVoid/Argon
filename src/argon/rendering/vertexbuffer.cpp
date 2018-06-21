@@ -8,7 +8,7 @@ Argon::Rendering::VertexBuffer::VertexBuffer ( GLuint name, Context * source_con
 	name ( name )
 {
 	
-	source_context -> Ref ();
+	source_context -> ref ();
 	
 }
 
@@ -18,7 +18,7 @@ Argon::Rendering::VertexBuffer::~VertexBuffer ()
 	source_context -> function_ptrs.delete_buffers ( 1, & name );
 	name = 0;
 	
-	source_context -> Deref ();
+	source_context -> deref ();
 	
 }
 

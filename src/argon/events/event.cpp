@@ -42,14 +42,14 @@ Argon::Events::Event::Event ( const EventDefinition * definition ):
 	canceled ( false )
 {
 	
-	definition -> Ref ();
+	definition -> ref ();
 	
 };
 
 Argon::Events::Event::~Event ()
 {
 	
-	definition -> Deref ();
+	definition -> deref ();
 	
 };
 

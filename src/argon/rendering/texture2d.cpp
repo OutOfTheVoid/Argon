@@ -11,7 +11,7 @@ Argon::Rendering::Texture2D::Texture2D ( GLuint texture_name, Context * source_c
 	height ( 0 )
 {
 	
-	source_context -> Ref ();
+	source_context -> ref ();
 	
 }
 
@@ -29,7 +29,7 @@ Argon::Rendering::Texture2D::~Texture2D ()
 		
 	}
 	
-	source_context -> Deref ();
+	source_context -> deref ();
 	source_context = nullptr;
 	
 }

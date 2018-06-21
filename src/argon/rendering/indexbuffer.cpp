@@ -8,7 +8,7 @@ Argon::Rendering::IndexBuffer::IndexBuffer ( GLuint name, Context * source_conte
 	name ( name )
 {
 	
-	source_context -> Ref ();
+	source_context -> ref ();
 	
 }
 
@@ -18,7 +18,7 @@ Argon::Rendering::IndexBuffer::~IndexBuffer ()
 	source_context -> function_ptrs.delete_buffers ( 1, & name );
 	name = 0;
 	
-	source_context -> Deref ();
+	source_context -> deref ();
 	
 }
 

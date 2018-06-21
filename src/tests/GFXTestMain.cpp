@@ -27,7 +27,7 @@ void AppEntry ()
 	Argon::UI::application_runloop ( app_init_options );
 
 	if ( main_window != nullptr )
-		main_window -> Deref ();
+		main_window -> deref ();
 	
 };
 
@@ -109,7 +109,7 @@ void ApplicationLaunched ( void * data )
 			
 			render_context -> flush_back_buffer ();
 			
-			framebuffer -> Deref ();
+			framebuffer -> deref ();
 			
 		}
 		

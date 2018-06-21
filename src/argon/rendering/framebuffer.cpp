@@ -10,7 +10,7 @@ Argon::Rendering::FrameBuffer::FrameBuffer ( GLuint gl_framebuffer_name, Context
 	source_context ( source_context )
 {
 	
-	source_context -> Ref ();
+	source_context -> ref ();
 	
 };
 
@@ -37,7 +37,7 @@ Argon::Rendering::FrameBuffer::~FrameBuffer ()
 	source_context -> function_ptrs.delete_framebuffers ( 1, & gl_framebuffer_name );
 	
 	if ( gl_framebuffer_name != 0 )
-		source_context -> Deref ();
+		source_context -> deref ();
 	
 };
 

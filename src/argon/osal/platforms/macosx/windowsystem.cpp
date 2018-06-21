@@ -169,7 +169,7 @@ void Argon::OSAL::MacOSX::MacWindow::set_view ( IMacWindowView * view_virt )
 	if ( this -> view != nullptr )
 	{
 		
-		this -> view -> Deref ();
+		this -> view -> deref ();
 		this -> view = nullptr;
 		
 	}
@@ -184,7 +184,7 @@ void Argon::OSAL::MacOSX::MacWindow::set_view ( IMacWindowView * view_virt )
 			
 			MacGLView * gl_view = dynamic_cast<MacGLView *> ( view_virt );
 			
-			gl_view -> Ref ();
+			gl_view -> ref ();
 			
 			view_instance = gl_view -> ns_opengl_view_instance;
 			
@@ -228,7 +228,7 @@ Argon::OSAL::MacOSX::MacWindow::~MacWindow ()
 	if ( view != nullptr )
 	{
 		
-		view -> Deref ();
+		view -> deref ();
 		view = nullptr;
 		
 	}
